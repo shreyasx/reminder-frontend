@@ -52,6 +52,7 @@ const Welcome = () => {
 
 	const onSubmitSignUp = event => {
 		event.preventDefault();
+		setValues({ ...values, loading: true });
 		signup({ name, username: username.toLowerCase(), password, email })
 			.then(data => {
 				if (data.error) {
@@ -66,6 +67,7 @@ const Welcome = () => {
 									setValues({
 										...values,
 										didRedirect: true,
+										loading: false,
 									});
 								});
 							}
