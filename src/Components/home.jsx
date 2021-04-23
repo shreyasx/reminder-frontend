@@ -114,10 +114,7 @@ const Home = ({ history }) => {
 			{errorMessage()}
 			{successMessage()}
 			<div className="row">
-				<div
-					style={{ borderRight: "2px solid black", minHeight: "85vh" }}
-					className="col-md-6"
-				>
+				<div className="col-md-6">
 					<h1 style={{ color: "red" }}>Remninders</h1>
 					{loadingLeft ? (
 						<h3>Loading..</h3>
@@ -173,10 +170,7 @@ const Home = ({ history }) => {
 						</>
 					)}
 				</div>
-				<div
-					style={{ borderLeft: "2px solid black", minHeight: "85vh" }}
-					className="col-md-6"
-				>
+				<div className="col-md-6">
 					<h1 style={{ color: "red" }}>Todos</h1>
 					{loadingRight ? (
 						<h3>Loading..</h3>
