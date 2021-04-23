@@ -32,7 +32,7 @@ const Welcome = () => {
 	const onSubmitSignIn = event => {
 		event.preventDefault();
 		setValues({ ...values, loading: true });
-		signin({ username, password })
+		signin({ username: username.toLowerCase(), password })
 			.then(data => {
 				if (data.error) {
 					setValues({ ...values, error: data.error, loading: false });
@@ -52,12 +52,12 @@ const Welcome = () => {
 
 	const onSubmitSignUp = event => {
 		event.preventDefault();
-		signup({ name, username, password, email })
+		signup({ name, username: username.toLowerCase(), password, email })
 			.then(data => {
 				if (data.error) {
 					setValues({ ...values, error: data.error, loading: false });
 				} else {
-					signin({ username, password })
+					signin({ username: username.toLowerCase(), password })
 						.then(dat => {
 							if (dat.error) {
 								setValues({ ...values, error: dat.error, loading: false });
@@ -87,17 +87,32 @@ const Welcome = () => {
 				<label className={`label`} htmlFor="name">
 					Name:
 				</label>
-				<input onChange={handleChange("name")} type="text" id="name" />
+				<input
+					placeholder="3 or more characters"
+					onChange={handleChange("name")}
+					type="text"
+					id="name"
+				/>
 				<br />
 				<label className={`label`} htmlFor="user">
 					Username:
 				</label>
-				<input onChange={handleChange("username")} type="text" id="user" />
+				<input
+					placeholder="3 or more characters"
+					onChange={handleChange("username")}
+					type="text"
+					id="user"
+				/>
 				<br />
 				<label className={`label`} htmlFor="email">
 					Email:
 				</label>
-				<input onChange={handleChange("email")} type="email" id="email" />
+				<input
+					placeholder="Will receive reminders"
+					onChange={handleChange("email")}
+					type="email"
+					id="email"
+				/>
 				<br />
 				<label className={`label`} htmlFor="passw">
 					Password:
@@ -147,7 +162,7 @@ const Welcome = () => {
 	return isAuthenticated().user ? (
 		<Redirect to={`/${isAuthenticated().user.username}`} />
 	) : (
-		<div>
+		<>
 			<p id="intro">
 				Hello, welcome to Reminders & Todos. Here you sign in and set reminders,
 				or To-dos, and you get reminded on the email address that you provide.
@@ -161,7 +176,14 @@ const Welcome = () => {
 			</div>
 			{quote()}
 			{performRedirect()}
-		</div>
+			<p id="footer">
+				Website created and maintained by{" "}
+				<a target="blank" href="https://shreyasx.github.io/">
+					Shreyas Jamkhandi
+				</a>
+				.<br />© All rights reserved.
+			</p>
+		</>
 	);
 };
 

@@ -27,13 +27,9 @@ const Verify = ({ match }) => {
 	return (
 		<>
 			{loading ? (
-				<img
-					style={{ width: "200px" }}
-					src="https://upload.wikimedia.org/wikipedia/commons/b/b9/Youtube_loading_symbol_1_(wobbly).gif"
-					alt="loading"
-				/>
+				<h4>Loading..</h4>
 			) : (
-				<h2>
+				<h4>
 					{resp === true ? (
 						<>
 							Account verified. Go to{" "}
@@ -45,7 +41,7 @@ const Verify = ({ match }) => {
 					) : (
 						resp.error
 					)}
-				</h2>
+				</h4>
 			)}
 		</>
 	);

@@ -9,8 +9,8 @@ function App() {
 	return (
 		<BrowserRouter>
 			<Switch>
-				<PrivateRoute path="/:username" exact component={Home} />
 				<Route path="/" exact component={Welcome} />
+				<PrivateRoute path="/:username" exact component={Home} />
 				<Route path="/verify/:token" exact component={Verify} />
 			</Switch>
 		</BrowserRouter>

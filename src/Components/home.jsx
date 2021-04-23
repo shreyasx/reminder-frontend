@@ -1,13 +1,7 @@
 import { useEffect, useState } from "react";
 import { isAuthenticated, signout } from "../auth/helper";
 import { API } from "../backend";
-import {
-	addReminder,
-	deleteReminder,
-	addTodo,
-	deleteTodo,
-	updateTodo,
-} from "./homeHelper";
+import { addReminder, addTodo, deleteTodo, updateTodo } from "./homeHelper";
 import Dustbin from "../images/dustbin.webp";
 
 const Home = ({ history }) => {
@@ -108,16 +102,51 @@ const Home = ({ history }) => {
 		);
 	};
 
-	return (
+	const introText = () => (
 		<>
-			<h1>Hi, {isAuthenticated().user.name}</h1>
+			<button
+				onClick={() => {
+					signout(() => {
+						history.push("/");
+					});
+				}}
+				style={{ float: "right" }}
+			>
+				Signout
+			</button>
+			<h3>Hey there, {isAuthenticated().user.name}.</h3>
+			<p>
+				Here you can see all your Reminders & Todos. We would love for you to
+				keep in mind a few things.
+			</p>
+			<ul>
+				<li>
+					You cannot delete a reminder once set. However, you can delete your
+					Todos. CAREFUL!
+				</li>
+				<li>
+					You need to verify your email address to be able to set reminders.
+				</li>
+				<li>
+					You cannot set a reminder in the next 5 minutes. I mean, why would you
+					wanna do that, right?
+				</li>
+			</ul>
+		</>
+	);
+
+	return (
+		<div id="homeDiv">
+			{introText()}
 			{errorMessage()}
 			{successMessage()}
-			<div className="row">
-				<div className="col-md-6">
-					<h1 style={{ color: "red" }}>Remninders</h1>
+			<div style={{ marginTop: "30px" }} className="row">
+				<div className="halves col-md-6">
+					<h3>Remninders:</h3>
 					{loadingLeft ? (
 						<h3>Loading..</h3>
+					) : reminders.length === 0 ? (
+						<h5>List empty!</h5>
 					) : (
 						<>
 							<ul style={{ listStyleType: "circle" }}>
@@ -125,61 +154,52 @@ const Home = ({ history }) => {
 									return (
 										<li key={i + 97}>
 											{reminder.title}: {reminder.date}{" "}
-											<img
-												style={{
-													height: "22px",
-													border: "1px solid black",
-													cursor: "pointer",
-												}}
-												onClick={() => {
-													setLoadingLeft(true);
-													deleteReminder(reminder._id, preload);
-												}}
-												src={Dustbin}
-												alt="Dustbin"
-											/>
 										</li>
 									);
 								})}
 							</ul>
 							<hr />
-							<h2 style={{ color: "green" }}>Add Remninder</h2>
-							<label className={`label2`} htmlFor="title">
-								Title:
-							</label>
-							<input type="text" id="title" />
-							<br />
-							<label className={`label2`} htmlFor="date">
-								Date:
-							</label>
-							<input type="date" id="date" />
-							<br />
-							<label className={`label2`} htmlFor="time">
-								Time:
-							</label>
-							<input type="time" id="time" />
-							<br />
-							<br />
-							{verified ? (
-								<button
-									onClick={() => {
-										setError(false);
-										setLoadingLeft(true);
-										addReminder(preload, () => setError(true));
-									}}
-								>
-									Add reminder
-								</button>
-							) : (
-								<button onClick={verify}>Verify email to set reminder</button>
-							)}
 						</>
 					)}
+					<h4>Add Remninder:</h4>
+					<label className={`label2`} htmlFor="title">
+						Title:
+					</label>
+					<input type="text" id="title" />
+					<br />
+					<label className={`label2`} htmlFor="date">
+						Date:
+					</label>
+					<input type="date" id="date" />
+					<br />
+					<label className={`label2`} htmlFor="time">
+						Time:
+					</label>
+					<input type="time" id="time" />
+					<br />
+					<br />
+					{loadingLeft ? (
+						""
+					) : verified ? (
+						<button
+							onClick={() => {
+								setError(false);
+								setLoadingLeft(true);
+								addReminder(preload, () => setError(true));
+							}}
+						>
+							Add reminder
+						</button>
+					) : (
+						<button onClick={verify}>Verify email to set reminder</button>
+					)}
 				</div>
-				<div className="col-md-6">
-					<h1 style={{ color: "red" }}>Todos</h1>
+				<div className="halves col-md-6">
+					<h3>Todos:</h3>
 					{loadingRight ? (
 						<h3>Loading..</h3>
+					) : todos.length === 0 ? (
+						<h5>List empty!</h5>
 					) : (
 						<>
 							{todos.map((todo, i) => {
@@ -216,37 +236,30 @@ const Home = ({ history }) => {
 									</>
 								);
 							})}
-							<hr />
-							<h2 style={{ color: "green" }}>Add Todo</h2>
-							<label className={`label2`} htmlFor="tofoTitle">
-								Title:
-							</label>
-							<input type="text" id="todoTitle" />
-							<br />
-							<button
-								onClick={() => {
-									setError(false);
-									setLoadingRight(true);
-									addTodo(preload, () => setError(true));
-								}}
-							>
-								Add todo
-							</button>
 						</>
+					)}
+					<hr />
+					<h4>Add Todo:</h4>
+					<label className={`label2`} htmlFor="tofoTitle">
+						Title:
+					</label>
+					<input type="text" id="todoTitle" />
+					<br />
+					<br />
+					{!loadingRight && (
+						<button
+							onClick={() => {
+								setError(false);
+								setLoadingRight(true);
+								addTodo(preload, () => setError(true));
+							}}
+						>
+							Add todo
+						</button>
 					)}
 				</div>
 			</div>
-			<button
-				onClick={() => {
-					signout(() => {
-						history.push("/");
-					});
-				}}
-				style={{ margin: "0 20px" }}
-			>
-				Signout
-			</button>
-		</>
+		</div>
 	);
 };
 
