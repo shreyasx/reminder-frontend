@@ -33,7 +33,19 @@ const Verify = ({ match }) => {
 					alt="loading"
 				/>
 			) : (
-				<h2>{resp === true ? "Account verified!" : resp.error}</h2>
+				<h2>
+					{resp === true ? (
+						<>
+							Account verified. Go to{" "}
+							<a href="https://reminder-app-shreyasx.vercel.app/">
+								Reminders & Todos
+							</a>{" "}
+							or refresh the page that brought you here.
+						</>
+					) : (
+						resp.error
+					)}
+				</h2>
 			)}
 		</>
 	);

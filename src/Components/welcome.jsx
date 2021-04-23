@@ -19,6 +19,16 @@ const Welcome = () => {
 		setValues({ ...values, [nam]: event.target.value });
 	};
 
+	const quote = () => (
+		<div id="quoteContainer">
+			<p id="quote">
+				"Men more frequently require to be reminded than informed."
+				<br />
+				<span id="author">― Samuel Johnson, The Rambler</span>
+			</p>
+		</div>
+	);
+
 	const onSubmitSignIn = event => {
 		event.preventDefault();
 		setValues({ ...values, loading: true });
@@ -72,19 +82,32 @@ const Welcome = () => {
 
 	const signupForm = () => (
 		<>
-			<h1>Sign Up</h1>{" "}
-			<form>
-				<label htmlFor="name">Name:</label>
+			<h3 style={{ marginLeft: "110px" }}>Register</h3>{" "}
+			<form style={{ margin: "20px" }}>
+				<label className={`label`} htmlFor="name">
+					Name:
+				</label>
 				<input onChange={handleChange("name")} type="text" id="name" />
 				<br />
-				<label htmlFor="user">Username:</label>
+				<label className={`label`} htmlFor="user">
+					Username:
+				</label>
 				<input onChange={handleChange("username")} type="text" id="user" />
 				<br />
-				<label htmlFor="email">Email:</label>
+				<label className={`label`} htmlFor="email">
+					Email:
+				</label>
 				<input onChange={handleChange("email")} type="email" id="email" />
 				<br />
-				<label htmlFor="passw">Password:</label>
-				<input onChange={handleChange("password")} type="password" id="passw" />
+				<label className={`label`} htmlFor="passw">
+					Password:
+				</label>
+				<input
+					placeholder="5 or more characters"
+					onChange={handleChange("password")}
+					type="password"
+					id="passw"
+				/>
 				<br />
 				<button onClick={onSubmitSignUp}>GO!</button>
 			</form>
@@ -93,21 +116,17 @@ const Welcome = () => {
 
 	const signinForm = () => (
 		<>
-			<h1>Sign In</h1>
-			<form>
-				<input
-					onChange={handleChange("username")}
-					placeholder="username"
-					type="text"
-					id="userr"
-				/>
+			<h3 style={{ marginLeft: "125px" }}>Log In</h3>{" "}
+			<form style={{ margin: "20px" }}>
+				<label className={`label`} htmlFor="userr">
+					Username:
+				</label>
+				<input onChange={handleChange("username")} type="email" id="userr" />
 				<br />
-				<input
-					onChange={handleChange("password")}
-					placeholder="pass"
-					type="password"
-					id="pass"
-				/>
+				<label className={`label`} htmlFor="pass">
+					Password:
+				</label>
+				<input onChange={handleChange("password")} type="password" id="pass" />
 				<br />
 				<button onClick={onSubmitSignIn}>GO!</button>
 			</form>
@@ -129,12 +148,18 @@ const Welcome = () => {
 		<Redirect to={`/${isAuthenticated().user.username}`} />
 	) : (
 		<div>
+			<p id="intro">
+				Hello, welcome to Reminders & Todos. Here you sign in and set reminders,
+				or To-dos, and you get reminded on the email address that you provide.
+				What you waiting for?
+			</p>
 			{loadingMessage()}
 			{errorMessage()}
 			<div className="row">
 				<div className="col-md-6">{signupForm()}</div>
 				<div className="col-md-6">{signinForm()}</div>
 			</div>
+			{quote()}
 			{performRedirect()}
 		</div>
 	);

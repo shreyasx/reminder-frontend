@@ -144,13 +144,19 @@ const Home = ({ history }) => {
 							</ul>
 							<hr />
 							<h2 style={{ color: "green" }}>Add Remninder</h2>
-							<label htmlFor="title">Title:</label>
+							<label className={`label2`} htmlFor="title">
+								Title:
+							</label>
 							<input type="text" id="title" />
 							<br />
-							<label htmlFor="date">Date:</label>
+							<label className={`label2`} htmlFor="date">
+								Date:
+							</label>
 							<input type="date" id="date" />
 							<br />
-							<label htmlFor="time">Time:</label>
+							<label className={`label2`} htmlFor="time">
+								Time:
+							</label>
 							<input type="time" id="time" />
 							<br />
 							<br />
@@ -212,7 +218,9 @@ const Home = ({ history }) => {
 							})}
 							<hr />
 							<h2 style={{ color: "green" }}>Add Todo</h2>
-							<label htmlFor="tofoTitle">Title:</label>
+							<label className={`label2`} htmlFor="tofoTitle">
+								Title:
+							</label>
 							<input type="text" id="todoTitle" />
 							<br />
 							<button
