@@ -176,13 +176,6 @@ const Welcome = () => {
 			</div>
 			{quote()}
 			{performRedirect()}
-			<p id="footer">
-				Website created and maintained by{" "}
-				<a target="blank" href="https://shreyasx.github.io/">
-					Shreyas Jamkhandi
-				</a>
-				.<br />© All rights reserved.
-			</p>
 		</>
 	);
 };

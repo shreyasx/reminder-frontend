@@ -40,24 +40,8 @@
 	margin: 20px;
 }
 
-#footer {
-	position: fixed;
-	left: 0;
-	bottom: 0;
-	width: 100%;
-	text-align: center;
-	background-color: white;
-	padding: 20px 0;
-}
-
 @media only screen and (max-width: 991px) {
 	.halves {
 		margin-bottom: 50px;
-	}
-}
-
-@media only screen and (max-height: 830px) {
-	#footer {
-		position: static;
 	}
 }
