@@ -1,6 +1,25 @@
 import { API } from "../backend";
 import { isAuthenticated } from "../auth/helper";
 
+const deleteReminder = (id, next) => {
+	fetch(
+		`${API}/user/${isAuthenticated().user.username}/delete/reminder/${id}`,
+		{
+			method: "GET",
+			headers: {
+				Accept: "application/json",
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${isAuthenticated().token}`,
+			},
+		}
+	)
+		.then(r => r.json())
+		.then(re => {
+			if (re === "done") next();
+		})
+		.catch(console.log);
+};
+
 const addReminder = (next, error) => {
 	const date = document.getElementById("date").value;
 	const title = document.getElementById("title").value;
@@ -15,7 +34,7 @@ const addReminder = (next, error) => {
 		date[7] !== "-" ||
 		time[2] !== ":" ||
 		time.length !== 5 ||
-		Date.parse(dateTime) < Date.now() + 300000
+		Date.parse(dateTime) < Date.now() + 120000
 	) {
 		error();
 		next();
@@ -98,4 +117,4 @@ const updateTodo = (id, next) => {
 		});
 };
 
-export { addReminder, addTodo, deleteTodo, updateTodo };
+export { addReminder, addTodo, deleteTodo, deleteReminder, updateTodo };

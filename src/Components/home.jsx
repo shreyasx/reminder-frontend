@@ -1,7 +1,13 @@
 import { useEffect, useState } from "react";
 import { isAuthenticated, signout } from "../auth/helper";
 import { API } from "../backend";
-import { addReminder, addTodo, deleteTodo, updateTodo } from "./homeHelper";
+import {
+	addReminder,
+	addTodo,
+	deleteTodo,
+	updateTodo,
+	deleteReminder,
+} from "./homeHelper";
 import Dustbin from "../images/dustbin.webp";
 
 const Home = ({ history }) => {
@@ -121,14 +127,10 @@ const Home = ({ history }) => {
 			</p>
 			<ul>
 				<li>
-					You cannot delete a reminder once set. However, you can delete your
-					Todos. CAREFUL!
-				</li>
-				<li>
 					You need to verify your email address to be able to set reminders.
 				</li>
 				<li>
-					You cannot set a reminder in the next 5 minutes. I mean, why would you
+					You cannot set a reminder in the next 2 minutes. I mean, why would you
 					wanna do that, right?
 				</li>
 			</ul>
@@ -154,6 +156,19 @@ const Home = ({ history }) => {
 									return (
 										<li key={i + 97}>
 											{reminder.title}: {reminder.date}{" "}
+											<img
+												style={{
+													height: "22px",
+													border: "1px solid black",
+													cursor: "pointer",
+												}}
+												onClick={() => {
+													setLoadingLeft(true);
+													deleteReminder(reminder._id, preload);
+												}}
+												src={Dustbin}
+												alt="Dustbin"
+											/>
 										</li>
 									);
 								})}
