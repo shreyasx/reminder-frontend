@@ -176,22 +176,34 @@ const Home = ({ history }) => {
 							<hr />
 						</>
 					)}
-					<h4>Add Remninder:</h4>
-					<label className={`label2`} htmlFor="title">
-						Title:
-					</label>
-					<input type="text" id="title" />
-					<br />
-					<label className={`label2`} htmlFor="date">
-						Date:
-					</label>
-					<input type="date" id="date" />
-					<br />
-					<label className={`label2`} htmlFor="time">
-						Time:
-					</label>
-					<input type="time" id="time" />
-					<br />
+					<div
+						style={
+							verified
+								? {}
+								: {
+										filter: "blur(1.5px)",
+										pointerEvents: "none",
+								  }
+						}
+						id="blur"
+					>
+						<h4>Add Remninder:</h4>
+						<label className={`label2`} htmlFor="title">
+							Title:
+						</label>
+						<input type="text" id="title" />
+						<br />
+						<label className={`label2`} htmlFor="date">
+							Date:
+						</label>
+						<input type="date" id="date" />
+						<br />
+						<label className={`label2`} htmlFor="time">
+							Time:
+						</label>
+						<input type="time" id="time" />
+						<br />
+					</div>
 					<br />
 					{loadingLeft ? (
 						""
@@ -206,7 +218,9 @@ const Home = ({ history }) => {
 							Add reminder
 						</button>
 					) : (
-						<button onClick={verify}>Verify email to set reminder</button>
+						<button style={{ color: "red" }} onClick={verify}>
+							Verify email to set reminder
+						</button>
 					)}
 				</div>
 				<div className="halves col-md-6">
