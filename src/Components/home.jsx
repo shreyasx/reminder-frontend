@@ -151,8 +151,9 @@ const Home = ({ history }) => {
 						<h5>List empty!</h5>
 					) : (
 						<>
-							<ul style={{ listStyleType: "circle" }}>
+							<ul>
 								{reminders.map((reminder, i) => {
+									const completed = Date.now() > Date.parse(reminder.date);
 									return (
 										<li key={i + 97}>
 											{reminder.title}: {reminder.date}{" "}
@@ -169,6 +170,12 @@ const Home = ({ history }) => {
 												src={Dustbin}
 												alt="Dustbin"
 											/>
+											{completed && (
+												<>
+													<span> </span>
+													<i style={{ color: "green" }}>Reminder sent!</i>
+												</>
+											)}
 										</li>
 									);
 								})}
@@ -212,7 +219,10 @@ const Home = ({ history }) => {
 							onClick={() => {
 								setError(false);
 								setLoadingLeft(true);
-								addReminder(preload, () => setError(true));
+								addReminder(preload, () => {
+									setError(true);
+									setLoadingLeft(false);
+								});
 							}}
 						>
 							Add reminder
@@ -280,7 +290,10 @@ const Home = ({ history }) => {
 							onClick={() => {
 								setError(false);
 								setLoadingRight(true);
-								addTodo(preload, () => setError(true));
+								addTodo(preload, () => {
+									setError(true);
+									setLoadingRight(false);
+								});
 							}}
 						>
 							Add todo

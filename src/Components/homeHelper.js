@@ -37,7 +37,6 @@ const addReminder = (next, error) => {
 		Date.parse(dateTime) < Date.now() + 120000
 	) {
 		error();
-		next();
 		return;
 	}
 	const data = {
@@ -66,7 +65,6 @@ const addTodo = (next, error) => {
 	if (title === "") {
 		console.log("Error!");
 		error();
-		next();
 		return;
 	}
 	fetch(`${API}/user/${isAuthenticated().user.username}/add/todo`, {
