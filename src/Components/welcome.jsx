@@ -167,8 +167,8 @@ const Welcome = () => {
 		<>
 			<p id="intro">
 				Hello, welcome to Reminders & Todos. Here you sign in and set reminders,
-				or To-dos, and you get reminded on the email address that you provide.
-				What you waiting for?
+				or To-dos, and when the time comes, you get reminded on the email
+				address that you provide. Try now!
 			</p>
 			{loadingMessage()}
 			{errorMessage()}
