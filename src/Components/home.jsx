@@ -144,7 +144,7 @@ const Home = ({ history }) => {
 			{successMessage()}
 			<div style={{ marginTop: "30px" }} className="row">
 				<div className="halves col-md-6">
-					<h3>Remninders:</h3>
+					<h3>Reminders:</h3>
 					{loadingLeft ? (
 						<h3>Loading..</h3>
 					) : reminders.length === 0 ? (
@@ -194,7 +194,7 @@ const Home = ({ history }) => {
 						}
 						id="blur"
 					>
-						<h4>Add Remninder:</h4>
+						<h4>Add Reminder:</h4>
 						<label className={`label2`} htmlFor="title">
 							Title:
 						</label>
