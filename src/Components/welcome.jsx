@@ -84,7 +84,7 @@ const Welcome = () => {
 
 	const signupForm = () => (
 		<>
-			<h3 style={{ marginLeft: "110px" }}>Register</h3>{" "}
+			<h3 style={{ marginLeft: "70px" }}>Register Now!</h3>{" "}
 			<form style={{ margin: "20px" }}>
 				<label className={`label`} htmlFor="name">
 					Name:
