@@ -49,7 +49,7 @@ const Home = ({ history }) => {
 						const { date, title, _id } = rem;
 						const d = new Intl.DateTimeFormat("en-IN", {
 							dateStyle: "long",
-							timeStyle: "long",
+							timeStyle: "medium",
 						}).format(new Date(date));
 						return { date: d, title, _id };
 					})
