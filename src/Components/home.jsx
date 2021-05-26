@@ -47,8 +47,13 @@ const Home = ({ history }) => {
 				setReminders(
 					resp.map(rem => {
 						const { date, title, _id } = rem;
-						const d = new Date(date);
-						return { date: d.toString().split(" GMT")[0], title, _id };
+						const d = new Date(date).toLocaleDateString("en-IN", {
+							weekday: "long",
+							year: "numeric",
+							month: "long",
+							day: "numeric",
+						});
+						return { date: d, title, _id };
 					})
 				);
 				setLoadingLeft(false);

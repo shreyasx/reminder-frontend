@@ -58,27 +58,16 @@ const Welcome = () => {
 				if (data.error) {
 					setValues({ ...values, error: data.error, loading: false });
 				} else {
-					signin({ username: username.toLowerCase(), password })
-						.then(dat => {
-							if (dat.error) {
-								setValues({ ...values, error: dat.error, loading: false });
-							} else {
-								authenticate(dat, () => {
-									setValues({
-										...values,
-										didRedirect: true,
-										loading: false,
-									});
-								});
-							}
-						})
-						.catch(er => {
-							console.log("Signin request failed");
+					authenticate(data, () => {
+						setValues({
+							...values,
+							didRedirect: true,
 						});
+					});
 				}
 			})
 			.catch(er => {
-				console.log("Error in signup");
+				console.log("Signin request failed");
 			});
 	};
 
