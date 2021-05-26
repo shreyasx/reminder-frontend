@@ -47,12 +47,10 @@ const Home = ({ history }) => {
 				setReminders(
 					resp.map(rem => {
 						const { date, title, _id } = rem;
-						const d = new Date(date).toLocaleDateString("en-IN", {
-							weekday: "long",
-							year: "numeric",
-							month: "long",
-							day: "numeric",
-						});
+						const d = new Intl.DateTimeFormat("en-IN", {
+							dateStyle: "long",
+							timeStyle: "long",
+						}).format(new Date(date));
 						return { date: d, title, _id };
 					})
 				);
@@ -254,7 +252,7 @@ const Home = ({ history }) => {
 												setLoadingRight(true);
 												updateTodo(todo._id, preload);
 											}}
-											checked={todo.completed && "checked"}
+											checked={todo.completed}
 											key={i + 99}
 											type="checkbox"
 											id={`todo${todo.i + 1}`}
