@@ -33,7 +33,7 @@ const Verify = ({ match }) => {
 					{resp === true ? (
 						<>
 							Account verified. Go to{" "}
-							<a href="https://reminder-app-shreyasx.vercel.app/">
+							<a href="https://remindersandtodos.netlify.app/">
 								Reminders & Todos
 							</a>{" "}
 							or refresh the page that brought you here.
@@ -46,5 +46,7 @@ const Verify = ({ match }) => {
 		</>
 	);
 };
+
+Verify.whyDidYouRender = true;
 
 export default Verify;

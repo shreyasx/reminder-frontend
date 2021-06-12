@@ -157,7 +157,6 @@ const Home = ({ history }) => {
 							<ul>
 								{reminders.map((reminder, i) => {
 									const completed = Date.now() > reminder.dateSeconds;
-									console.log(completed);
 									return (
 										<li key={i + 97}>
 											{reminder.title}: {reminder.date}{" "}
@@ -308,5 +307,7 @@ const Home = ({ history }) => {
 		</div>
 	);
 };
+
+Home.whyDidYouRender = true;
 
 export default Home;
