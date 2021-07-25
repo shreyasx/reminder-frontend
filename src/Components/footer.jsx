@@ -7,7 +7,7 @@ const Footer = () => (
 			Shreyas Jamkhandi
 		</a>
 		.
-		<br /> &#169;All rights reserved.
+		<br /> &#169; All rights reserved.
 	</div>
 );
 

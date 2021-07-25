@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { authenticate, signin, signup, isAuthenticated } from "../auth/helper";
 import { Redirect } from "react-router-dom";
-import { Grid, TextField, Paper, Button } from "@material-ui/core";
+import { Grid, TextField, Button } from "@material-ui/core";
 import useStyles from "./styles";
 
 const Welcome = () => {
 	const [values, setValues] = useState({
-		registerError: {},
+		registerError: { email: "", password: "", username: "" },
+		loginError: { username: "", password: "" },
 		name: "",
 		username: "",
 		email: "",
@@ -33,7 +34,6 @@ const Welcome = () => {
 	);
 
 	const onSubmitSignIn = event => {
-		event.preventDefault();
 		setValues({ ...values, loading: true });
 		signin({ username: username.toLowerCase(), password })
 			.then(data => {
@@ -54,7 +54,6 @@ const Welcome = () => {
 	};
 
 	const onSubmitSignUp = event => {
-		event.preventDefault();
 		setValues({ ...values, loading: true });
 		signup({ name, username: username.toLowerCase(), password, email })
 			.then(data => {
@@ -78,84 +77,124 @@ const Welcome = () => {
 		<>
 			<h3>Register Now!</h3>
 			<div>
-				<TextField
-					style={{ minWidth: "300px" }}
-					error={values.registerError.name && true}
-					id="outlined-error-helper-text"
-					label={values.registerError.name ? "Error" : "Name"}
-					placeholder="Shreyas J"
-					helperText={
-						values.registerError.name
-							? values.registerError.name
-							: "3 or more characters"
-					}
-					variant="outlined"
-				/>
+				<p>
+					<TextField
+						className={classes.inputField}
+						error={values.registerError.name && true}
+						label={values.registerError.name ? "Error" : "Name"}
+						placeholder="Shreyas J"
+						helperText={
+							values.registerError.name
+								? values.registerError.name
+								: "3 or more characters."
+						}
+						onChange={handleChange("name")}
+						variant="outlined"
+					/>
+				</p>
+				<p>
+					<TextField
+						className={classes.inputField}
+						error={values.registerError.username && true}
+						label={values.registerError.username ? "Error" : "Username"}
+						placeholder="shreyasx"
+						helperText={
+							values.registerError.username
+								? values.registerError.username
+								: "3 or more characters."
+						}
+						onChange={handleChange("username")}
+						variant="outlined"
+					/>
+				</p>
+				<p>
+					<TextField
+						className={classes.inputField}
+						error={values.registerError.email && true}
+						label={values.registerError.email ? "Error" : "Email"}
+						placeholder="shreyxs@gmail.com"
+						helperText={
+							values.registerError.email
+								? values.registerError.email
+								: "You'll need to verify it."
+						}
+						onChange={handleChange("email")}
+						variant="outlined"
+					/>
+				</p>
+				<p>
+					<TextField
+						className={classes.inputField}
+						error={values.registerError.password && true}
+						label={values.registerError.password ? "Error" : "Password"}
+						placeholder="Password"
+						helperText={
+							values.registerError.password
+								? values.registerError.password
+								: "5 or more characters."
+						}
+						onChange={handleChange("password")}
+						variant="outlined"
+					/>
+				</p>
 			</div>
-			<form style={{ margin: "20px" }}>
-				<label className={`label`} htmlFor="name">
-					Name:
-				</label>
-				<input
-					placeholder="3 or more characters"
-					onChange={handleChange("name")}
-					type="text"
-					id="name"
-				/>
-				<br />
-				<label className={`label`} htmlFor="user">
-					Username:
-				</label>
-				<input
-					placeholder="3 or more characters"
-					onChange={handleChange("username")}
-					type="text"
-					id="user"
-				/>
-				<br />
-				<label className={`label`} htmlFor="email">
-					Email:
-				</label>
-				<input
-					placeholder="Will receive reminders"
-					onChange={handleChange("email")}
-					type="email"
-					id="email"
-				/>
-				<br />
-				<label className={`label`} htmlFor="passw">
-					Password:
-				</label>
-				<input
-					placeholder="5 or more characters"
-					onChange={handleChange("password")}
-					type="password"
-					id="passw"
-				/>
-				<br />
-				<Button onClick={onSubmitSignUp} variant="contained">
-					Register
-				</Button>
-			</form>
+			<Button
+				className={classes.buttons}
+				onClick={onSubmitSignUp}
+				color="primary"
+				variant="contained"
+			>
+				Register
+			</Button>
 		</>
 	);
 
 	const signinForm = () => (
 		<>
-			<h3>Log In</h3>{" "}
-			<form style={{ margin: "20px" }}>
-				<label className={`label`} htmlFor="userr">
-					Username:
-				</label>
-				<input onChange={handleChange("username")} type="email" id="userr" />
-				<br />
-				<label className={`label`} htmlFor="pass">
-					Password:
-				</label>
-				<input onChange={handleChange("password")} type="password" id="pass" />
-				<br />
-				<button onClick={onSubmitSignIn}>GO!</button>
-			</form>
+			<h3>Log In</h3>
+			<div>
+				<p>
+					<TextField
+						className={classes.inputField}
+						error={values.loginError.username && true}
+						label={values.loginError.username ? "Error" : "Username"}
+						placeholder="shreyasx"
+						helperText={
+							values.loginError.username
+								? values.loginError.username
+								: values.username
+								? `Hey, ${values.username}!`
+								: `Hey!`
+						}
+						onChange={handleChange("username")}
+						variant="outlined"
+					/>
+				</p>
+				<p>
+					<TextField
+						className={classes.inputField}
+						error={values.loginError.password && true}
+						label={values.loginError.password ? "Error" : "Password"}
+						placeholder="Password"
+						type="password"
+						helperText={
+							values.loginError.password
+								? values.loginError.password
+								: "Forgot? Can't help it. :("
+						}
+						onChange={handleChange("password")}
+						variant="outlined"
+					/>
+				</p>
+			</div>
+			<Button
+				className={classes.buttons}
+				onClick={onSubmitSignIn}
+				color="primary"
+				variant="contained"
+			>
+				Login
+			</Button>
 		</>
 	);
 
@@ -181,18 +220,14 @@ const Welcome = () => {
 			</p>
 			{loadingMessage()}
 			{errorMessage()}
-			<Grid container spacing={1}>
-				<Grid item xs={12} sm={6}>
-					<Paper className={classes.paper}>{signupForm()}</Paper>
+			<Grid container justifyContent="center" spacing={1}>
+				<Grid className={classes.paper} item xs={12} sm={10} md={6}>
+					{signupForm()}
 				</Grid>
-				<Grid item xs={12} sm={6}>
-					<Paper className={classes.paper}>{signinForm()}</Paper>
+				<Grid className={classes.paper} item xs={12} sm={10} md={6}>
+					{signinForm()}
 				</Grid>
 			</Grid>
-			{/* <div className="row">
-				<div className="col-md-6">{signupForm()}</div>
-				<div className="col-md-6">{signinForm()}</div>
-			</div> */}
 			{quote()}
 			{performRedirect()}
 		</>

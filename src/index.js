@@ -7,9 +7,7 @@ const App = lazy(() => import("./App"));
 const Footer = lazy(() => import("./Components/footer"));
 
 ReactDOM.render(
-	<Suspense
-		fallback={<Loading loading background="#faebd7" loaderColor="#000" />}
-	>
+	<Suspense fallback={<Loading loading background="#fff" loaderColor="#000" />}>
 		<App />
 		<Footer />
 	</Suspense>,
