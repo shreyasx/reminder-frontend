@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { authenticate, signin, signup, isAuthenticated } from "../auth/helper";
 import { Redirect } from "react-router-dom";
+import { Grid, TextField, Paper, Button } from "@material-ui/core";
+import useStyles from "./styles";
 
 const Welcome = () => {
 	const [values, setValues] = useState({
-		error: "",
+		registerError: {},
 		name: "",
 		username: "",
 		email: "",
@@ -13,16 +15,17 @@ const Welcome = () => {
 		didRedirect: false,
 	});
 
+	const classes = useStyles();
+
 	const { name, error, username, email, password, loading } = values;
 
-	const handleChange = nam => event => {
+	const handleChange = nam => event =>
 		setValues({ ...values, [nam]: event.target.value });
-	};
 
 	const quote = () => (
 		<div id="quoteContainer">
 			<p id="quote">
-				"Men more frequently require to be reminded than informed."
+				"Men more frequently require to be reminded, than to be informed."
 				<br />
 				<span id="author">― Samuel Johnson, The Rambler</span>
 			</p>
@@ -73,7 +76,22 @@ const Welcome = () => {
 
 	const signupForm = () => (
 		<>
-			<h3 style={{ marginLeft: "70px" }}>Register Now!</h3>{" "}
+			<h3>Register Now!</h3>
+			<div>
+				<TextField
+					style={{ minWidth: "300px" }}
+					error={values.registerError.name && true}
+					id="outlined-error-helper-text"
+					label={values.registerError.name ? "Error" : "Name"}
+					placeholder="Shreyas J"
+					helperText={
+						values.registerError.name
+							? values.registerError.name
+							: "3 or more characters"
+					}
+					variant="outlined"
+				/>
+			</div>
 			<form style={{ margin: "20px" }}>
 				<label className={`label`} htmlFor="name">
 					Name:
@@ -115,14 +133,16 @@ const Welcome = () => {
 					id="passw"
 				/>
 				<br />
-				<button onClick={onSubmitSignUp}>GO!</button>
+				<Button onClick={onSubmitSignUp} variant="contained">
+					Register
+				</Button>
 			</form>
 		</>
 	);
 
 	const signinForm = () => (
 		<>
-			<h3 style={{ marginLeft: "125px" }}>Log In</h3>{" "}
+			<h3>Log In</h3>{" "}
 			<form style={{ margin: "20px" }}>
 				<label className={`label`} htmlFor="userr">
 					Username:
@@ -141,10 +161,10 @@ const Welcome = () => {
 
 	const loadingMessage = () => loading && <h2>Loading...</h2>;
 
-	const performRedirect = () => {
-		if (isAuthenticated())
-			return <Redirect to={`/${isAuthenticated().user.username}`} />;
-	};
+	const performRedirect = () =>
+		isAuthenticated() && (
+			<Redirect to={`/${isAuthenticated().user.username}`} />
+		);
 
 	const errorMessage = () => (
 		<div style={{ display: error ? "" : "none", color: "red" }}>{error}</div>
@@ -161,10 +181,18 @@ const Welcome = () => {
 			</p>
 			{loadingMessage()}
 			{errorMessage()}
-			<div className="row">
+			<Grid container spacing={1}>
+				<Grid item xs={12} sm={6}>
+					<Paper className={classes.paper}>{signupForm()}</Paper>
+				</Grid>
+				<Grid item xs={12} sm={6}>
+					<Paper className={classes.paper}>{signinForm()}</Paper>
+				</Grid>
+			</Grid>
+			{/* <div className="row">
 				<div className="col-md-6">{signupForm()}</div>
 				<div className="col-md-6">{signinForm()}</div>
-			</div>
+			</div> */}
 			{quote()}
 			{performRedirect()}
 		</>
