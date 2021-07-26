@@ -3,6 +3,7 @@ import { isAuthenticated } from "../auth/helper";
 import { API } from "../backend";
 import { deleteReminder, addReminder } from "./homeHelper";
 import Dustbin from "../images/dustbin.webp";
+import RemindersTable from "./remTable";
 
 const Reminders = () => {
 	const [reminders, setReminders] = useState([]);
@@ -85,49 +86,19 @@ const Reminders = () => {
 	useEffect(() => {
 		getReminders();
 		isVerified();
+		console.log(reminders);
 	}, []);
 
 	return (
 		<>
 			{errorMessage()}
 			{successMessage()}
-			<h3>Reminders:</h3>
 			{loading ? (
 				<h3>Loading..</h3>
 			) : reminders.length === 0 ? (
 				<h5>List empty!</h5>
 			) : (
-				<>
-					<ul>
-						{reminders.map((reminder, i) => {
-							const completed = Date.now() > reminder.dateSeconds;
-							return (
-								<li key={i + 97}>
-									{reminder.title}: {reminder.date}{" "}
-									<img
-										style={{
-											height: "22px",
-											border: "1px solid black",
-											cursor: "pointer",
-										}}
-										onClick={() => {
-											setLoading(true);
-											deleteReminder(reminder._id, getReminders);
-										}}
-										src={Dustbin}
-										alt="Dustbin"
-									/>
-									{completed && (
-										<>
-											<span> </span>
-											<i style={{ color: "green" }}>Reminder sent!</i>
-										</>
-									)}
-								</li>
-							);
-						})}
-					</ul>
-				</>
+				<RemindersTable reminders={reminders} />
 			)}
 			<div
 				style={

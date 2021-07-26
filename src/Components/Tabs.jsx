@@ -87,8 +87,8 @@ export default function ScrollableTabsButtonForce() {
 					onChange={handleChange}
 					indicatorColor="primary"
 					textColor="primary"
-					// variant="fullWidth"
-					centered
+					variant="fullWidth"
+					// centered
 				>
 					<Tab label="Reminders" icon={<AccessAlarmIcon />} {...a11yProps(2)} />
 					<Tab label="To-dos" icon={<CheckCircleIcon />} {...a11yProps(1)} />
@@ -104,7 +104,8 @@ export default function ScrollableTabsButtonForce() {
 				<Todos />
 			</TabPanel>
 			<TabPanel value={value} index={2}>
-				{introText()}Profile YO
+				{introText()}
+				Profile YO
 			</TabPanel>
 		</div>
 	);
