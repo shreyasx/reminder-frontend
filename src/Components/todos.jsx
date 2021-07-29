@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { isAuthenticated } from "../auth/helper";
 import { API } from "../backend";
-import Dustbin from "../images/dustbin.webp";
 import { addTodo, deleteTodo, updateTodo } from "./homeHelper";
 
 const Todos = () => {
@@ -57,21 +56,7 @@ const Todos = () => {
 								/>{" "}
 								<label key={i + 98} htmlFor={`todo${todo.i + 1}`}>
 									{todo.title}
-								</label>{" "}
-								<img
-									style={{
-										height: "22px",
-										border: "1px solid black",
-										cursor: "pointer",
-									}}
-									onClick={() => {
-										setLoading(true);
-										deleteTodo(todo._id, getTodos);
-									}}
-									src={Dustbin}
-									alt="Dustbin"
-								/>
-								<br />
+								</label>
 							</>
 						);
 					})}

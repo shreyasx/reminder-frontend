@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import clsx from "clsx";
 import { lighten, makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -10,15 +9,11 @@ import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
-import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
-import IconButton from "@material-ui/core/IconButton";
-import Tooltip from "@material-ui/core/Tooltip";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
-import DeleteIcon from "@material-ui/icons/Delete";
-import FilterListIcon from "@material-ui/icons/FilterList";
+import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 
 function descendingComparator(a, b, orderBy) {
 	if (b[orderBy] < a[orderBy]) {
@@ -47,11 +42,9 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-	{
-		id: "title",
-		label: "Title",
-	},
+	{ id: "title", label: "Title" },
 	{ id: "date", label: "Date" },
+	{ id: "delete", label: "Delete" },
 ];
 
 function EnhancedTableHead(props) {
@@ -70,18 +63,24 @@ function EnhancedTableHead(props) {
 						padding={"normal"}
 						sortDirection={orderBy === headCell.id ? order : false}
 					>
-						<TableSortLabel
-							active={orderBy === headCell.id}
-							direction={orderBy === headCell.id ? order : "asc"}
-							onClick={createSortHandler(headCell.id)}
-						>
-							{headCell.label}
-							{orderBy === headCell.id ? (
-								<span className={classes.visuallyHidden}>
-									{order === "desc" ? "sorted descending" : "sorted ascending"}
-								</span>
-							) : null}
-						</TableSortLabel>
+						{headCell.id === "delete" ? (
+							<div>{headCell.label}</div>
+						) : (
+							<TableSortLabel
+								active={orderBy === headCell.id}
+								direction={orderBy === headCell.id ? order : "asc"}
+								onClick={createSortHandler(headCell.id)}
+							>
+								{headCell.label}
+								{orderBy === headCell.id ? (
+									<span className={classes.visuallyHidden}>
+										{order === "desc"
+											? "sorted descending"
+											: "sorted ascending"}
+									</span>
+								) : null}
+							</TableSortLabel>
+						)}
 					</TableCell>
 				))}
 			</TableRow>
@@ -93,17 +92,13 @@ EnhancedTableHead.propTypes = {
 	classes: PropTypes.object.isRequired,
 	numSelected: PropTypes.number.isRequired,
 	onRequestSort: PropTypes.func.isRequired,
-	onSelectAllClick: PropTypes.func.isRequired,
 	order: PropTypes.oneOf(["asc", "desc"]).isRequired,
 	orderBy: PropTypes.string.isRequired,
 	rowCount: PropTypes.number.isRequired,
 };
 
 const useToolbarStyles = makeStyles(theme => ({
-	root: {
-		paddingLeft: theme.spacing(2),
-		paddingRight: theme.spacing(1),
-	},
+	root: { paddingLeft: theme.spacing(2), paddingRight: theme.spacing(1) },
 	highlight:
 		theme.palette.type === "light"
 			? {
@@ -114,76 +109,33 @@ const useToolbarStyles = makeStyles(theme => ({
 					color: theme.palette.text.primary,
 					backgroundColor: theme.palette.secondary.dark,
 			  },
-	title: {
-		flex: "1 1 100%",
-	},
+	title: { padding: 10, flex: "1 1 100%" },
 }));
 
-const EnhancedTableToolbar = props => {
+const EnhancedTableToolbar = () => {
 	const classes = useToolbarStyles();
-	const { numSelected } = props;
 
 	return (
-		<Toolbar
-			className={clsx(classes.root, {
-				[classes.highlight]: numSelected > 0,
-			})}
+		<Typography
+			className={classes.title}
+			variant="h4"
+			id="tableTitle"
+			component="div"
 		>
-			{numSelected > 0 ? (
-				<Typography
-					className={classes.title}
-					color="inherit"
-					variant="subtitle1"
-					component="div"
-				>
-					{numSelected} selected
-				</Typography>
-			) : (
-				<Typography
-					className={classes.title}
-					variant="h6"
-					id="tableTitle"
-					component="div"
-				>
-					Reminders
-				</Typography>
-			)}
-
-			{numSelected > 0 ? (
-				<Tooltip title="Delete">
-					<IconButton aria-label="delete">
-						<DeleteIcon />
-					</IconButton>
-				</Tooltip>
-			) : (
-				<Tooltip title="Filter list">
-					<IconButton aria-label="filter list">
-						<FilterListIcon />
-					</IconButton>
-				</Tooltip>
-			)}
-		</Toolbar>
+			Reminders
+		</Typography>
 	);
 };
 
-EnhancedTableToolbar.propTypes = {
-	numSelected: PropTypes.number.isRequired,
-};
-
 const useStyles = makeStyles(theme => ({
-	root: {
-		width: "100%",
-	},
+	root: { width: "100%" },
 	paper: {
-		maxWidth: "auto",
-		margin: "0 auto",
+		minWidth: 500,
+		maxWidth: 1000,
+		marginRight: "auto",
 		marginBottom: theme.spacing(2),
 	},
-	table: {
-		minWidth: 500,
-		margin: "0 auto",
-		width: "auto",
-	},
+	table: { width: "100%" },
 	visuallyHidden: {
 		border: 0,
 		clip: "rect(0 0 0 0)",
@@ -197,12 +149,10 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
-export default function EnhancedTable({ reminders }) {
-	console.log(reminders);
+export default function EnhancedTable({ reminders, deleteRem }) {
 	const classes = useStyles();
 	const [order, setOrder] = React.useState("asc");
 	const [orderBy, setOrderBy] = React.useState("title");
-	const [selected, setSelected] = React.useState([]);
 	const [page, setPage] = React.useState(0);
 	const [dense, setDense] = React.useState(false);
 	const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -211,35 +161,6 @@ export default function EnhancedTable({ reminders }) {
 		const isAsc = orderBy === property && order === "asc";
 		setOrder(isAsc ? "desc" : "asc");
 		setOrderBy(property);
-	};
-
-	const handleSelectAllClick = event => {
-		if (event.target.checked) {
-			const newSelecteds = reminders.map(n => n.name);
-			setSelected(newSelecteds);
-			return;
-		}
-		setSelected([]);
-	};
-
-	const handleClick = (event, name) => {
-		const selectedIndex = selected.indexOf(name);
-		let newSelected = [];
-
-		if (selectedIndex === -1) {
-			newSelected = newSelected.concat(selected, name);
-		} else if (selectedIndex === 0) {
-			newSelected = newSelected.concat(selected.slice(1));
-		} else if (selectedIndex === selected.length - 1) {
-			newSelected = newSelected.concat(selected.slice(0, -1));
-		} else if (selectedIndex > 0) {
-			newSelected = newSelected.concat(
-				selected.slice(0, selectedIndex),
-				selected.slice(selectedIndex + 1)
-			);
-		}
-
-		setSelected(newSelected);
 	};
 
 	const handleChangePage = (event, newPage) => {
@@ -255,15 +176,13 @@ export default function EnhancedTable({ reminders }) {
 		setDense(event.target.checked);
 	};
 
-	const isSelected = name => selected.indexOf(name) !== -1;
-
 	const emptyRows =
 		rowsPerPage - Math.min(rowsPerPage, reminders.length - page * rowsPerPage);
 
 	return (
 		<div className={classes.root}>
 			<Paper className={classes.paper}>
-				<EnhancedTableToolbar numSelected={selected.length} />
+				<EnhancedTableToolbar numSelected={0} />
 				<TableContainer>
 					<Table
 						className={classes.table}
@@ -273,10 +192,9 @@ export default function EnhancedTable({ reminders }) {
 					>
 						<EnhancedTableHead
 							classes={classes}
-							numSelected={selected.length}
+							numSelected={0}
 							order={order}
 							orderBy={orderBy}
-							onSelectAllClick={handleSelectAllClick}
 							onRequestSort={handleRequestSort}
 							rowCount={reminders.length}
 						/>
@@ -284,21 +202,13 @@ export default function EnhancedTable({ reminders }) {
 							{stableSort(reminders, getComparator(order, orderBy))
 								.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 								.map((row, index) => {
-									const isItemSelected = isSelected(row.name);
-									const labelId = `enhanced-table-checkbox-${index}`;
+									const labelId = `th-${index}`;
 
 									return (
-										<TableRow
-											hover
-											onClick={event => handleClick(event, row.name)}
-											role="checkbox"
-											aria-checked={isItemSelected}
-											tabIndex={-1}
-											key={row.name}
-											selected={isItemSelected}
-										>
+										<TableRow hover tabIndex={-1} key={index} selected={false}>
 											<TableCell
 												component="th"
+												align="center"
 												id={labelId}
 												scope="row"
 												padding="normal"
@@ -306,6 +216,14 @@ export default function EnhancedTable({ reminders }) {
 												{row.title}
 											</TableCell>
 											<TableCell align="center">{row.date}</TableCell>
+											<TableCell align="center">
+												<div
+													style={{ cursor: "pointer" }}
+													onClick={() => deleteRem(row._id)}
+												>
+													<DeleteForeverIcon />
+												</div>
+											</TableCell>
 										</TableRow>
 									);
 								})}
