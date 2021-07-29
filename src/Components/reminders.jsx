@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { isAuthenticated } from "../auth/helper";
 import { API } from "../backend";
 import { deleteReminder } from "./homeHelper";
-import RemindersTable from "./remTable";
+import { RemindersTable } from ".";
 
 const Reminders = () => {
 	const [reminders, setReminders] = useState([]);

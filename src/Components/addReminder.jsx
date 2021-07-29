@@ -87,31 +87,33 @@ const AddReminder = () => {
 				</label>
 				<input type="time" id="time" />
 				<br />
+				{loading ? (
+					""
+				) : verified ? (
+					<button
+						onClick={() => {
+							setError(false);
+							setLoading(true);
+							addReminder(
+								() => {
+									setSuccess(true);
+									setLoading(false);
+								},
+								() => {
+									setError(true);
+									setLoading(false);
+								}
+							);
+						}}
+					>
+						Add reminder
+					</button>
+				) : (
+					<button style={{ color: "red" }} onClick={verify}>
+						Verify email to set reminder
+					</button>
+				)}
 			</div>
-			<br />
-			{loading ? (
-				""
-			) : verified ? (
-				<button
-					onClick={() => {
-						setError(false);
-						setLoading(true);
-						addReminder(
-							() => {},
-							() => {
-								setError(true);
-								setLoading(false);
-							}
-						);
-					}}
-				>
-					Add reminder
-				</button>
-			) : (
-				<button style={{ color: "red" }} onClick={verify}>
-					Verify email to set reminder
-				</button>
-			)}
 		</>
 	);
 };
