@@ -77,72 +77,65 @@ const Welcome = () => {
 		<>
 			<h3>Register Now!</h3>
 			<div>
-				<p>
-					<TextField
-						className={classes.inputField}
-						error={values.registerError.name && true}
-						label={values.registerError.name ? "Error" : "Name"}
-						placeholder="Shreyas J"
-						helperText={
-							values.registerError.name
-								? values.registerError.name
-								: "3 or more characters."
-						}
-						onChange={handleChange("name")}
-						variant="outlined"
-					/>
-				</p>
-				<p>
-					<TextField
-						className={classes.inputField}
-						error={values.registerError.username && true}
-						label={values.registerError.username ? "Error" : "Username"}
-						placeholder="shreyasx"
-						helperText={
-							values.registerError.username
-								? values.registerError.username
-								: "3 or more characters."
-						}
-						onChange={handleChange("username")}
-						variant="outlined"
-					/>
-				</p>
-				<p>
-					<TextField
-						className={classes.inputField}
-						error={values.registerError.email && true}
-						label={values.registerError.email ? "Error" : "Email"}
-						placeholder="shreyxs@gmail.com"
-						helperText={
-							values.registerError.email
-								? values.registerError.email
-								: "You'll need to verify it."
-						}
-						onChange={handleChange("email")}
-						variant="outlined"
-					/>
-				</p>
-				<p>
-					<TextField
-						className={classes.inputField}
-						error={values.registerError.password && true}
-						label={values.registerError.password ? "Error" : "Password"}
-						placeholder="Password"
-						helperText={
-							values.registerError.password
-								? values.registerError.password
-								: "5 or more characters."
-						}
-						onChange={handleChange("password")}
-						variant="outlined"
-					/>
-				</p>
+				<TextField
+					className={classes.inputField}
+					error={values.registerError.name && true}
+					label={values.registerError.name ? "Error" : "Name"}
+					placeholder="Shreyas J"
+					helperText={
+						values.registerError.name
+							? values.registerError.name
+							: "3 or more characters."
+					}
+					onChange={handleChange("name")}
+					variant="outlined"
+				/>
+				<TextField
+					className={classes.inputField}
+					error={values.registerError.username && true}
+					label={values.registerError.username ? "Error" : "Username"}
+					placeholder="shreyasx"
+					helperText={
+						values.registerError.username
+							? values.registerError.username
+							: "3 or more characters."
+					}
+					onChange={handleChange("username")}
+					variant="outlined"
+				/>
+				<TextField
+					className={classes.inputField}
+					error={values.registerError.email && true}
+					label={values.registerError.email ? "Error" : "Email"}
+					placeholder="shreyxs@gmail.com"
+					helperText={
+						values.registerError.email
+							? values.registerError.email
+							: "You'll need to verify it."
+					}
+					onChange={handleChange("email")}
+					variant="outlined"
+				/>
+				<TextField
+					className={classes.inputField}
+					error={values.registerError.password && true}
+					label={values.registerError.password ? "Error" : "Password"}
+					placeholder="Password"
+					helperText={
+						values.registerError.password
+							? values.registerError.password
+							: "5 or more characters."
+					}
+					onChange={handleChange("password")}
+					variant="outlined"
+				/>
 			</div>
 			<Button
 				className={classes.buttons}
 				onClick={onSubmitSignUp}
 				color="primary"
 				variant="contained"
+				disabled={false}
 			>
 				Register
 			</Button>
@@ -153,39 +146,35 @@ const Welcome = () => {
 		<>
 			<h3>Log In</h3>
 			<div>
-				<p>
-					<TextField
-						className={classes.inputField}
-						error={values.loginError.username && true}
-						label={values.loginError.username ? "Error" : "Username"}
-						placeholder="shreyasx"
-						helperText={
-							values.loginError.username
-								? values.loginError.username
-								: values.username
-								? `Hey, ${values.username}!`
-								: `Hey!`
-						}
-						onChange={handleChange("username")}
-						variant="outlined"
-					/>
-				</p>
-				<p>
-					<TextField
-						className={classes.inputField}
-						error={values.loginError.password && true}
-						label={values.loginError.password ? "Error" : "Password"}
-						placeholder="Password"
-						type="password"
-						helperText={
-							values.loginError.password
-								? values.loginError.password
-								: "Forgot? Can't help it. :("
-						}
-						onChange={handleChange("password")}
-						variant="outlined"
-					/>
-				</p>
+				<TextField
+					className={classes.inputField}
+					error={values.loginError.username && true}
+					label={values.loginError.username ? "Error" : "Username"}
+					placeholder="shreyasx"
+					helperText={
+						values.loginError.username
+							? values.loginError.username
+							: values.username
+							? `Hey, ${values.username}!`
+							: `Hey!`
+					}
+					onChange={handleChange("username")}
+					variant="outlined"
+				/>
+				<TextField
+					className={classes.inputField}
+					error={values.loginError.password && true}
+					label={values.loginError.password ? "Error" : "Password"}
+					placeholder="Password"
+					type="password"
+					helperText={
+						values.loginError.password
+							? values.loginError.password
+							: "Forgot? Can't help it. :("
+					}
+					onChange={handleChange("password")}
+					variant="outlined"
+				/>
 			</div>
 			<Button
 				className={classes.buttons}

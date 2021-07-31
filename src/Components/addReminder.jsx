@@ -2,12 +2,23 @@ import React from "react";
 import { isAuthenticated } from "../auth/helper";
 import { API } from "../backend";
 import { addReminder } from "./homeHelper";
+import { Grid, TextField, Button } from "@material-ui/core";
+import useStyles from "./styles";
+import "date-fns";
+import DateFnsUtils from "@date-io/date-fns";
+import {
+	MuiPickersUtilsProvider,
+	KeyboardTimePicker,
+	KeyboardDatePicker,
+} from "@material-ui/pickers";
 
 const AddReminder = () => {
 	const [loading, setLoading] = React.useState(true);
 	const [verified, setVerified] = React.useState(false);
 	const [error, setError] = React.useState(false);
 	const [success, setSuccess] = React.useState(false);
+	const [title, setTitle] = React.useState("");
+	const [selectedDate, setSelectedDate] = React.useState(new Date());
 
 	const isVerified = () => {
 		fetch(`${API}/user/${isAuthenticated().user.username}/isVerified`, {
@@ -19,11 +30,16 @@ const AddReminder = () => {
 			},
 		})
 			.then(r => r.json())
-			.then(setVerified)
+			.then(resp => {
+				setVerified(resp);
+				setLoading(false);
+			})
 			.catch(console.log);
 	};
 
 	React.useEffect(isVerified, []);
+	const classes = useStyles();
+	const handleDateChange = date => setSelectedDate(date);
 
 	const errorMessage = () =>
 		error && <p style={{ color: "red" }}>{`Invalid data entered.`}</p>;
@@ -60,58 +76,79 @@ const AddReminder = () => {
 		<>
 			{errorMessage()}
 			{successMessage()}
+			<h4>Add Reminder:</h4>
 			<div
-				style={
-					verified
-						? {}
-						: {
-								filter: "blur(1.5px)",
-								pointerEvents: "none",
-						  }
-				}
-				id="blur"
+				style={{
+					display: "flex",
+					flexDirection: "column",
+					alignItems: "center",
+				}}
 			>
-				<h4>Add Reminder:</h4>
-				<label className={`label2`} htmlFor="title">
-					Title:
-				</label>
-				<input type="text" id="title" />
-				<br />
-				<label className={`label2`} htmlFor="date">
-					Date:
-				</label>
-				<input type="date" id="date" />
-				<br />
-				<label className={`label2`} htmlFor="time">
-					Time:
-				</label>
-				<input type="time" id="time" />
-				<br />
-				{loading ? (
-					""
-				) : verified ? (
-					<button
+				<TextField
+					className={classes.inputField}
+					label="Title"
+					onChange={event => setTitle(event.target.value)}
+					placeholder="Pick up potatoes!"
+					helperText="What do you wanna be reminded about?"
+					variant="outlined"
+					id="title"
+				/>
+				<MuiPickersUtilsProvider utils={DateFnsUtils}>
+					<Grid container justifyContent="space-evenly">
+						<KeyboardDatePicker
+							margin="normal"
+							id="date-picker-dialog"
+							label="Pick a date."
+							value={selectedDate}
+							format="dd/MM/yyyy"
+							onChange={handleDateChange}
+							KeyboardButtonProps={{
+								"aria-label": "change date",
+							}}
+						/>
+						<KeyboardTimePicker
+							margin="normal"
+							id="time-picker"
+							value={selectedDate}
+							label="Pick a time."
+							onChange={handleDateChange}
+							KeyboardButtonProps={{
+								"aria-label": "change time",
+							}}
+						/>
+					</Grid>
+				</MuiPickersUtilsProvider>
+				{verified ? (
+					<Button
+						style={{ marginTop: "20px" }}
+						className={classes.buttons}
+						color="primary"
+						variant="contained"
 						onClick={() => {
 							setError(false);
 							setLoading(true);
 							addReminder(
-								() => {
-									setSuccess(true);
-									setLoading(false);
-								},
+								{ dateTime: Date.parse(selectedDate), title },
+								() => setLoading(false),
 								() => {
 									setError(true);
 									setLoading(false);
 								}
 							);
 						}}
+						disabled={loading}
 					>
-						Add reminder
-					</button>
+						add reminder
+					</Button>
 				) : (
-					<button style={{ color: "red" }} onClick={verify}>
+					<Button
+						variant="contained"
+						style={{ marginTop: "20px" }}
+						onClick={verify}
+						color="secondary"
+					>
 						Verify email to set reminder
-					</button>
+					</Button>
 				)}
 			</div>
 		</>

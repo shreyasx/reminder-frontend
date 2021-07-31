@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { isAuthenticated } from "../auth/helper";
 import { API } from "../backend";
-import { addTodo, updateTodo } from "./homeHelper";
+import { addTodo, deleteTodo, updateTodo } from "./homeHelper";
 
 const Todos = () => {
 	const [loading, setLoading] = useState(true);

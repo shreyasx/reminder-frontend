@@ -20,29 +20,16 @@ const deleteReminder = (id, next) => {
 		.catch(console.log);
 };
 
-const addReminder = (next, error) => {
-	const date = document.getElementById("date").value;
-	const title = document.getElementById("title").value;
-	const time = document.getElementById("time").value;
-	const dateTime = date + "T" + time + ":00";
-	if (
-		date === "" ||
-		time === "" ||
-		title === "" ||
-		date.length !== 10 ||
-		date[4] !== "-" ||
-		date[7] !== "-" ||
-		time[2] !== ":" ||
-		time.length !== 5 ||
-		Date.parse(dateTime) < Date.now() + 120000
-	) {
+const addReminder = (payload, next, error) => {
+	const { dateTime, title } = payload;
+	if (title === "" || dateTime < Date.now() + 120000) {
 		error();
 		return;
 	}
 	const data = {
 		title,
 		user: isAuthenticated().user.username,
-		date: Date.parse(dateTime),
+		date: dateTime,
 	};
 	fetch(`${API}/user/${isAuthenticated().user.username}/add/reminder`, {
 		method: "POST",

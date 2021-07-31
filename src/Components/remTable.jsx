@@ -132,12 +132,11 @@ const EnhancedTableToolbar = () => {
 const useStyles = makeStyles(theme => ({
 	root: { width: "100%" },
 	paper: {
-		minWidth: 500,
 		maxWidth: 1000,
 		marginRight: "auto",
 		marginBottom: theme.spacing(2),
 	},
-	table: { width: "100%" },
+	table: { width: "100%", minWidth: 500 },
 	visuallyHidden: {
 		border: 0,
 		clip: "rect(0 0 0 0)",
