@@ -1,22 +1,25 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Tabs from "@material-ui/core/Tabs";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
-import Tab from "@material-ui/core/Tab";
+import { isAuthenticated, signout } from "../auth/helper";
+import { Reminders, Todos, AddReminder } from ".";
+import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import AccessAlarmIcon from "@material-ui/icons/AccessAlarm";
 import AlarmAddIcon from "@material-ui/icons/AlarmAdd";
-import CheckCircleIcon from "@material-ui/icons/CheckCircle";
-import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
-import { isAuthenticated } from "../auth/helper";
-import { Reminders, Todos, AddReminder } from ".";
+import {
+	Typography,
+	Button,
+	Tab,
+	useMediaQuery,
+	Tabs,
+	AppBar,
+	Box,
+} from "@material-ui/core";
 
 const introText = () => (
 	<>
-		<h3>Hey there, {isAuthenticated().user.name}.</h3>
+		<h2>Hey there, {isAuthenticated().user.name}.</h2>
 		<p>
 			Here you can see all your Reminders & Todos. We would love for you to keep
 			in mind a few things.
@@ -75,10 +78,17 @@ const useStyles = makeStyles(theme => ({
 	tabs: { margin: "0 auto" },
 }));
 
-export default function ScrollableTabsButtonForce() {
+const lastTab = JSON.parse(localStorage.getItem("lastTab"));
+
+export default function ScrollableTabsButtonForce({ history }) {
 	const classes = useStyles();
-	const [value, setValue] = React.useState(0);
-	const handleChange = (event, newValue) => setValue(newValue);
+	const [value, setValue] = React.useState(lastTab ? lastTab : 0);
+
+	const handleChange = (event, newValue) => {
+		localStorage.setItem("lastTab", JSON.stringify(newValue));
+		setValue(newValue);
+	};
+
 	const matches = useMediaQuery("(min-width: 740px)");
 
 	return (
@@ -113,7 +123,13 @@ export default function ScrollableTabsButtonForce() {
 			</TabPanel>
 			<TabPanel value={value} index={3}>
 				{introText()}
-				Profile YO
+				<Button
+					onClick={() => signout(() => history.push("/"))}
+					variant="outlined"
+					color="primary"
+				>
+					signout
+				</Button>
 			</TabPanel>
 		</div>
 	);

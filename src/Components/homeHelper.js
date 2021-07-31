@@ -47,8 +47,7 @@ const addReminder = (payload, next, error) => {
 		});
 };
 
-const addTodo = (next, error) => {
-	const title = document.getElementById("todoTitle").value;
+const addTodo = (title, next, error) => {
 	if (title === "") {
 		console.log("Error!");
 		error();

@@ -2,14 +2,21 @@ import React, { useState, useEffect } from "react";
 import { isAuthenticated } from "../auth/helper";
 import { API } from "../backend";
 import { addTodo, deleteTodo, updateTodo } from "./homeHelper";
+import {
+	FormControlLabel,
+	TextField,
+	Button,
+	Checkbox,
+} from "@material-ui/core";
+import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
+import { Grid } from "@material-ui/core";
+import useStyles from "./styles";
 
 const Todos = () => {
 	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(false);
 	const [todos, setTodos] = useState([]);
-
-	const errorMessage = () =>
-		error && <p key={1} style={{ color: "red" }}>{`Invalid data entered.`}</p>;
+	const [title, setTitle] = useState("");
+	const classes = useStyles();
 
 	const getTodos = () => {
 		fetch(`${API}/user/${isAuthenticated().user.username}/todos`, {
@@ -32,57 +39,64 @@ const Todos = () => {
 
 	return (
 		<>
-			{errorMessage()}
-			<h3>Todos:</h3>
-			{loading ? (
-				<h3>Loading..</h3>
-			) : todos.length === 0 ? (
-				<h5>List empty!</h5>
-			) : (
-				<>
-					{todos.map((todo, i) => {
-						return (
-							<>
-								<input
-									onChange={() => {
-										setLoading(true);
-										updateTodo(todo._id, getTodos);
-									}}
-									checked={todo.completed}
-									key={i + 99}
-									type="checkbox"
-									id={`todo${todo.i + 1}`}
-									value={todo.title}
-								/>{" "}
-								<label key={i + 98} htmlFor={`todo${todo.i + 1}`}>
-									{todo.title}
-								</label>
-							</>
-						);
-					})}
-				</>
-			)}
-			<h4>Add Todo:</h4>
-			<label className={`label2`} htmlFor="tofoTitle">
-				Title:
-			</label>
-			<input type="text" id="todoTitle" />
-			<br />
-			<br />
-			{!loading && (
-				<button
-					onClick={() => {
-						setError(false);
-						setLoading(true);
-						addTodo(getTodos, () => {
-							setError(true);
-							setLoading(false);
-						});
-					}}
-				>
-					Add todo
-				</button>
-			)}
+			<Grid container justifyContent="center" spacing={1}>
+				<Grid item xs={12} sm={6}>
+					<h3>List of To-dos:</h3>
+					{todos.length === 0 ? (
+						<h5>List empty!</h5>
+					) : (
+						<>
+							{todos.map((todo, i) => {
+								return (
+									<div>
+										<FormControlLabel
+											control={
+												<Checkbox
+													checked={todo.completed}
+													// TODO: Update todo list in redux store before firing request to the backend.
+													onChange={() => updateTodo(todo._id, getTodos)}
+													color="primary"
+												/>
+											}
+											label={todo.title}
+										/>
+										<span
+											onClick={() => deleteTodo(todo._id, getTodos)}
+											style={{ cursor: "pointer" }}
+										>
+											<DeleteForeverIcon />
+										</span>
+									</div>
+								);
+							})}
+						</>
+					)}
+				</Grid>
+				<Grid item xs={12} sm={6}>
+					<div>
+						<TextField
+							className={classes.inputField}
+							label={"Title"}
+							placeholder="shreyasx"
+							helperText="What do you wanna do?"
+							onChange={event => setTitle(event.target.value)}
+							variant="outlined"
+						/>
+					</div>
+					<Button
+						className={classes.buttons}
+						onClick={() => {
+							setLoading(true);
+							addTodo(title, getTodos, () => setLoading(false));
+						}}
+						disabled={loading}
+						color="primary"
+						variant="contained"
+					>
+						add todo
+					</Button>
+				</Grid>
+			</Grid>
 		</>
 	);
 };

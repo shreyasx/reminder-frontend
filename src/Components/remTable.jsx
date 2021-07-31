@@ -133,7 +133,7 @@ const useStyles = makeStyles(theme => ({
 	root: { width: "100%" },
 	paper: {
 		maxWidth: 1000,
-		marginRight: "auto",
+		margin: "0 auto",
 		marginBottom: theme.spacing(2),
 	},
 	table: { width: "100%", minWidth: 500 },

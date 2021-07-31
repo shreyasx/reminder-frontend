@@ -202,7 +202,7 @@ const Welcome = () => {
 		<Redirect to={`/${isAuthenticated().user.username}`} />
 	) : (
 		<>
-			<p id="intro">
+			<p className={classes.intro}>
 				Hello, welcome to Reminders & Todos. Here you sign in and set reminders,
 				or To-dos, and when the time comes, you get reminded on the email
 				address that you provide. Try now!
