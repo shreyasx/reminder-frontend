@@ -38,9 +38,13 @@ export const addReminder = payload => async dispatch => {
 
 	const { title, user, date } = payload;
 	if (title === "" || user === "" || date < Date.now() + 120000) {
-		dispatch({ type: "ADD_REMINDER_FAILURE" });
+		dispatch({
+			type: "ADD_REMINDER_FAILURE",
+			payload: "Please check your data!",
+		});
 		return;
 	}
+
 	try {
 		const response = await fetch(
 			`${API}/user/${isAuthenticated().user.username}/add/reminder`,
@@ -55,19 +59,39 @@ export const addReminder = payload => async dispatch => {
 			}
 		);
 		const reminder = await response.json();
+		if (reminder.error) {
+			dispatch({ type: "ADD_REMINDER_FAILURE", payload: reminder.error });
+			return;
+		}
 		dispatch({ type: "ADD_REMINDER_SUCCESS", payload: format(reminder) });
 	} catch (error) {
-		console.log("Failed to add reminder.");
-		dispatch({ type: "ADD_REMINDER_FAILURE" });
+		console.log(error);
+		dispatch({
+			type: "ADD_REMINDER_FAILURE",
+			payload: "Please check your data!",
+		});
 	}
 };
 
-export const deleteReminder = id => ({
-	type: "DELETE_REMINDER",
-	payload: { id },
-});
+export const deleteReminder = id => dispatch => {
+	dispatch({
+		type: "DELETE_REMINDER",
+		payload: { id },
+	});
+	fetch(
+		`${API}/user/${isAuthenticated().user.username}/delete/reminder/${id}`,
+		{
+			method: "GET",
+			headers: {
+				Accept: "application/json",
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${isAuthenticated().token}`,
+			},
+		}
+	).catch(console.log);
+};
 
-export const clear = () => ({ type: "CLEAR_SUCCESS_MESSAGE" });
+export const clearReminderMessages = () => ({ type: "CLEAR_SUCCESS_MESSAGE" });
 
 const format = reminder => {
 	const { date, title, _id } = reminder;

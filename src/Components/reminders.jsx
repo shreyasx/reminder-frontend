@@ -4,7 +4,6 @@ import { lighten, makeStyles } from "@material-ui/core/styles";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import { connect } from "react-redux";
 import { deleteReminder } from "../store/actions/reminders";
-import { deleteReminderAPIcall } from "./homeHelper";
 import {
 	Switch,
 	FormControlLabel,
@@ -25,10 +24,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-	deleteReminder: id => {
-		dispatch(deleteReminder(id));
-		deleteReminderAPIcall(id);
-	},
+	deleteReminder: id => dispatch(deleteReminder(id)),
 });
 
 function descendingComparator(a, b, orderBy) {

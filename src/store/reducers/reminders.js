@@ -19,7 +19,7 @@ export const reminders = (state = initialState, action = {}) => {
 
 		case "REMINDERS_FAILURE":
 			return Object.assign({}, state, {
-				error: action.payload,
+				error: "Couldn't fetch your reminders.",
 				loading: false,
 				success: "",
 			});
@@ -42,7 +42,7 @@ export const reminders = (state = initialState, action = {}) => {
 		case "ADD_REMINDER_FAILURE":
 			return Object.assign({}, state, {
 				loading: false,
-				error: "Please check your data!",
+				error: action.payload,
 				success: "",
 			});
 

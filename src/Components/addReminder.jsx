@@ -5,7 +5,7 @@ import { Grid, TextField, Button } from "@material-ui/core";
 import useStyles from "./styles";
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
-import { addReminder, clear } from "../store/actions/reminders";
+import { addReminder, clearReminderMessages } from "../store/actions/reminders";
 import { connect } from "react-redux";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
@@ -21,7 +21,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
 	addReminder: data => dispatch(addReminder(data)),
-	clearSuccessMessage: () => dispatch(clear()),
+	clearSuccessMessage: () => dispatch(clearReminderMessages()),
 });
 
 function Alert(props) {
@@ -33,6 +33,8 @@ const AddReminder = props => {
 	const [selectedDate, setSelectedDate] = React.useState(new Date());
 	const [error, setError] = React.useState(false);
 	const [success, setSuccess] = React.useState(false);
+	const [loading, setLoading] = React.useState(false);
+	const [mailSent, setMailSent] = React.useState(false);
 
 	React.useEffect(() => {
 		const { success, error } = props.reminders;
@@ -60,6 +62,7 @@ const AddReminder = props => {
 	const handleDateChange = date => setSelectedDate(date);
 
 	const verify = () => {
+		setLoading(true);
 		fetch(`${API}/user/verify/${isAuthenticated().user.username}`, {
 			method: "GET",
 			headers: {
@@ -70,7 +73,15 @@ const AddReminder = props => {
 		})
 			.then(r => r.json())
 			.then(resp => {
-				if (resp === "Sent mail") console.log("success");
+				if (resp === "Sent mail") {
+					setMailSent(true);
+					setSuccess(true);
+					setTimeout(() => {
+						setMailSent(false);
+						setSuccess(false);
+					}, 3000);
+				}
+				setLoading(false);
 			})
 			.catch(er => {
 				console.log(er);
@@ -95,7 +106,9 @@ const AddReminder = props => {
 			</Snackbar>
 			<Snackbar open={success} autoHideDuration={2500} onClose={handleClose}>
 				<Alert onClose={handleClose} severity="success">
-					{props.reminders.success}
+					{mailSent
+						? "Mail has been sent to your email address!"
+						: props.reminders.success}
 				</Alert>
 			</Snackbar>
 			<h4>Add Reminder:</h4>
@@ -157,6 +170,7 @@ const AddReminder = props => {
 						style={{ marginTop: "20px" }}
 						onClick={verify}
 						color="secondary"
+						disabled={loading}
 					>
 						Verify email to set reminder
 					</Button>

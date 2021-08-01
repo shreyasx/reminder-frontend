@@ -7,8 +7,11 @@ import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import AccessAlarmIcon from "@material-ui/icons/AccessAlarm";
 import { connect } from "react-redux";
-import { getReminders, clear } from "../store/actions/reminders";
-import { getTodos } from "../store/actions/todos";
+import {
+	getReminders,
+	clearReminderMessages,
+} from "../store/actions/reminders";
+import { getTodos, clearTodoMessages } from "../store/actions/todos";
 import AlarmAddIcon from "@material-ui/icons/AlarmAdd";
 import {
 	Typography,
@@ -23,7 +26,8 @@ import {
 const mapDispatchToProps = dispatch => ({
 	getReminders: () => dispatch(getReminders()),
 	getTodos: () => dispatch(getTodos()),
-	clearSuccessMessage: () => dispatch(clear()),
+	clearReminderMessages: () => dispatch(clearReminderMessages()),
+	clearTodoMessages: () => dispatch(clearTodoMessages()),
 });
 
 function TabPanel(props) {
@@ -81,9 +85,10 @@ function ScrollableTabsButtonForce(props) {
 	}, []);
 
 	const handleChange = (event, newValue) => {
-		props.clearSuccessMessage();
-		localStorage.setItem("lastTab", JSON.stringify(newValue));
 		setValue(newValue);
+		props.clearReminderMessages();
+		props.clearTodoMessages();
+		localStorage.setItem("lastTab", JSON.stringify(newValue));
 	};
 
 	const matches = useMediaQuery("(min-width: 740px)");
