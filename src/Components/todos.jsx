@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { isAuthenticated } from "../auth/helper";
-import { API } from "../backend";
-import { addTodo, deleteTodo, updateTodo } from "./homeHelper";
+import React, { useState } from "react";
+import { deleteTodoAPIcall, updateTodo } from "./homeHelper";
 import {
 	FormControlLabel,
 	TextField,
@@ -10,43 +8,36 @@ import {
 } from "@material-ui/core";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import { Grid } from "@material-ui/core";
+import { connect } from "react-redux";
+import { deleteTodo, addTodo } from "../store/actions/todos";
 import useStyles from "./styles";
 
-const Todos = () => {
-	const [loading, setLoading] = useState(true);
-	const [todos, setTodos] = useState([]);
+const mapStateToProps = state => ({
+	todos: state.todos,
+});
+
+const mapDispatchToProps = dispatch => ({
+	addTodo: title => dispatch(addTodo(title)),
+	deleteTodo: id => {
+		dispatch(deleteTodo(id));
+		deleteTodoAPIcall(id);
+	},
+});
+
+const Todos = props => {
 	const [title, setTitle] = useState("");
 	const classes = useStyles();
-
-	const getTodos = () => {
-		fetch(`${API}/user/${isAuthenticated().user.username}/todos`, {
-			method: "GET",
-			headers: {
-				Accept: "application/json",
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${isAuthenticated().token}`,
-			},
-		})
-			.then(r => r.json())
-			.then(resp => {
-				setTodos(resp);
-				setLoading(false);
-			})
-			.catch(console.log);
-	};
-
-	useEffect(getTodos, []);
 
 	return (
 		<>
 			<Grid container justifyContent="center" spacing={1}>
 				<Grid item xs={12} sm={6}>
 					<h3>List of To-dos:</h3>
-					{todos.length === 0 ? (
+					{props.todos.todos.length === 0 ? (
 						<h5>List empty!</h5>
 					) : (
 						<>
-							{todos.map((todo, i) => {
+							{props.todos.todos.map((todo, i) => {
 								return (
 									<div>
 										<FormControlLabel
@@ -54,14 +45,14 @@ const Todos = () => {
 												<Checkbox
 													checked={todo.completed}
 													// TODO: Update todo list in redux store before firing request to the backend.
-													onChange={() => updateTodo(todo._id, getTodos)}
+													onChange={() => updateTodo(todo._id)}
 													color="primary"
 												/>
 											}
 											label={todo.title}
 										/>
 										<span
-											onClick={() => deleteTodo(todo._id, getTodos)}
+											onClick={() => props.deleteTodo(todo._id)}
 											style={{ cursor: "pointer" }}
 										>
 											<DeleteForeverIcon />
@@ -85,11 +76,8 @@ const Todos = () => {
 					</div>
 					<Button
 						className={classes.buttons}
-						onClick={() => {
-							setLoading(true);
-							addTodo(title, getTodos, () => setLoading(false));
-						}}
-						disabled={loading}
+						onClick={() => props.addTodo(title)}
+						disabled={props.todos.loading}
 						color="primary"
 						variant="contained"
 					>
@@ -101,4 +89,4 @@ const Todos = () => {
 	);
 };
 
-export default Todos;
+export default connect(mapStateToProps, mapDispatchToProps)(Todos);

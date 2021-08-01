@@ -1,11 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
-import { isAuthenticated, signout } from "../auth/helper";
-import { Reminders, Todos, AddReminder } from ".";
+import { signout } from "../auth/helper";
+import { Reminders, Todos, AddReminder, IntroText } from ".";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import AccessAlarmIcon from "@material-ui/icons/AccessAlarm";
+import { connect } from "react-redux";
+import { getReminders, clear } from "../store/actions/reminders";
+import { getTodos } from "../store/actions/todos";
 import AlarmAddIcon from "@material-ui/icons/AlarmAdd";
 import {
 	Typography,
@@ -17,24 +20,11 @@ import {
 	Box,
 } from "@material-ui/core";
 
-const introText = () => (
-	<>
-		<h2>Hey there, {isAuthenticated().user.name}.</h2>
-		<p>
-			Here you can see all your Reminders & Todos. We would love for you to keep
-			in mind a few things.
-		</p>
-		<ul>
-			<li>
-				You need to verify your email address to be able to set reminders.
-			</li>
-			<li>
-				You cannot set a reminder in the next 2 minutes. I mean, why would you
-				wanna do that, right?
-			</li>
-		</ul>
-	</>
-);
+const mapDispatchToProps = dispatch => ({
+	getReminders: () => dispatch(getReminders()),
+	getTodos: () => dispatch(getTodos()),
+	clearSuccessMessage: () => dispatch(clear()),
+});
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
@@ -80,11 +70,18 @@ const useStyles = makeStyles(theme => ({
 
 const lastTab = JSON.parse(localStorage.getItem("lastTab"));
 
-export default function ScrollableTabsButtonForce({ history }) {
+function ScrollableTabsButtonForce(props) {
 	const classes = useStyles();
 	const [value, setValue] = React.useState(lastTab ? lastTab : 0);
 
+	React.useEffect(() => {
+		props.getReminders();
+		props.getTodos();
+		// eslint-disable-next-line
+	}, []);
+
 	const handleChange = (event, newValue) => {
+		props.clearSuccessMessage();
 		localStorage.setItem("lastTab", JSON.stringify(newValue));
 		setValue(newValue);
 	};
@@ -110,21 +107,21 @@ export default function ScrollableTabsButtonForce({ history }) {
 				</Tabs>
 			</AppBar>
 			<TabPanel value={value} index={0}>
-				{introText()}
+				<IntroText />
 				<Reminders />
 			</TabPanel>
 			<TabPanel value={value} index={1}>
-				{introText()}
+				<IntroText />
 				<AddReminder />
 			</TabPanel>
 			<TabPanel value={value} index={2}>
-				{introText()}
+				<IntroText />
 				<Todos />
 			</TabPanel>
 			<TabPanel value={value} index={3}>
-				{introText()}
+				<IntroText />
 				<Button
-					onClick={() => signout(() => history.push("/"))}
+					onClick={() => signout(() => props.history.push("/"))}
 					variant="outlined"
 					color="primary"
 				>
@@ -134,3 +131,5 @@ export default function ScrollableTabsButtonForce({ history }) {
 		</div>
 	);
 }
+
+export default connect(null, mapDispatchToProps)(ScrollableTabsButtonForce);

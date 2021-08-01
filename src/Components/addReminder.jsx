@@ -1,58 +1,65 @@
 import React from "react";
 import { isAuthenticated } from "../auth/helper";
 import { API } from "../backend";
-import { addReminder } from "./homeHelper";
 import { Grid, TextField, Button } from "@material-ui/core";
 import useStyles from "./styles";
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
+import { addReminder, clear } from "../store/actions/reminders";
+import { connect } from "react-redux";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 import {
 	MuiPickersUtilsProvider,
 	KeyboardTimePicker,
 	KeyboardDatePicker,
 } from "@material-ui/pickers";
 
-const AddReminder = () => {
-	const [loading, setLoading] = React.useState(true);
-	const [verified, setVerified] = React.useState(false);
-	const [error, setError] = React.useState(false);
-	const [success, setSuccess] = React.useState(false);
+const mapStateToProps = state => ({
+	reminders: state.reminders,
+});
+
+const mapDispatchToProps = dispatch => ({
+	addReminder: data => dispatch(addReminder(data)),
+	clearSuccessMessage: () => dispatch(clear()),
+});
+
+function Alert(props) {
+	return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
+const AddReminder = props => {
 	const [title, setTitle] = React.useState("");
 	const [selectedDate, setSelectedDate] = React.useState(new Date());
+	const [error, setError] = React.useState(false);
+	const [success, setSuccess] = React.useState(false);
 
-	const isVerified = () => {
-		fetch(`${API}/user/${isAuthenticated().user.username}/isVerified`, {
-			method: "GET",
-			headers: {
-				Accept: "application/json",
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${isAuthenticated().token}`,
-			},
-		})
-			.then(r => r.json())
-			.then(resp => {
-				setVerified(resp);
-				setLoading(false);
-			})
-			.catch(console.log);
+	React.useEffect(() => {
+		const { success, error } = props.reminders;
+		if (error !== "") {
+			setError(true);
+			setTimeout(() => {
+				props.clearSuccessMessage();
+			}, 3000);
+		}
+		if (success !== "") {
+			setSuccess(true);
+			setTimeout(() => {
+				props.clearSuccessMessage();
+			}, 3000);
+		}
+	}, [props]);
+
+	const handleClose = (event, reason) => {
+		if (reason === "clickaway") return;
+		setError(false);
+		setSuccess(false);
 	};
 
-	React.useEffect(isVerified, []);
 	const classes = useStyles();
 	const handleDateChange = date => setSelectedDate(date);
 
-	const errorMessage = () =>
-		error && <p style={{ color: "red" }}>{`Invalid data entered.`}</p>;
-
-	const successMessage = () =>
-		success && (
-			<p
-				style={{ color: "green" }}
-			>{`Sent a mail to the email address you provided. Check your mail!`}</p>
-		);
-
 	const verify = () => {
-		setLoading(true);
 		fetch(`${API}/user/verify/${isAuthenticated().user.username}`, {
 			method: "GET",
 			headers: {
@@ -63,19 +70,34 @@ const AddReminder = () => {
 		})
 			.then(r => r.json())
 			.then(resp => {
-				setLoading(false);
-				if (resp === "Sent mail") setSuccess(true);
+				if (resp === "Sent mail") console.log("success");
 			})
 			.catch(er => {
-				setLoading(false);
 				console.log(er);
 			});
 	};
 
+	const handleAddReminder = () => {
+		const data = {
+			title,
+			user: isAuthenticated().user.username,
+			date: Date.parse(selectedDate),
+		};
+		props.addReminder(data);
+	};
+
 	return (
 		<>
-			{errorMessage()}
-			{successMessage()}
+			<Snackbar open={error} autoHideDuration={2500} onClose={handleClose}>
+				<Alert onClose={handleClose} severity="error">
+					{props.reminders.error}
+				</Alert>
+			</Snackbar>
+			<Snackbar open={success} autoHideDuration={2500} onClose={handleClose}>
+				<Alert onClose={handleClose} severity="success">
+					{props.reminders.success}
+				</Alert>
+			</Snackbar>
 			<h4>Add Reminder:</h4>
 			<div
 				style={{
@@ -118,25 +140,14 @@ const AddReminder = () => {
 						/>
 					</Grid>
 				</MuiPickersUtilsProvider>
-				{verified ? (
+				{isAuthenticated().user.isVerified ? (
 					<Button
 						style={{ marginTop: "20px" }}
 						className={classes.buttons}
 						color="primary"
 						variant="contained"
-						onClick={() => {
-							setError(false);
-							setLoading(true);
-							addReminder(
-								{ dateTime: Date.parse(selectedDate), title },
-								() => setLoading(false),
-								() => {
-									setError(true);
-									setLoading(false);
-								}
-							);
-						}}
-						disabled={loading}
+						onClick={handleAddReminder}
+						disabled={props.reminders.loading}
 					>
 						add reminder
 					</Button>
@@ -155,4 +166,4 @@ const AddReminder = () => {
 	);
 };
 
-export default AddReminder;
+export default connect(mapStateToProps, mapDispatchToProps)(AddReminder);
