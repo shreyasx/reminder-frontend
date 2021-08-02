@@ -17,6 +17,7 @@ import {
 
 const mapStateToProps = state => ({
 	reminders: state.reminders,
+	verified: state.isVerified,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -153,7 +154,7 @@ const AddReminder = props => {
 						/>
 					</Grid>
 				</MuiPickersUtilsProvider>
-				{isAuthenticated().user.isVerified ? (
+				{props.verified.verified ? (
 					<Button
 						style={{ marginTop: "20px" }}
 						className={classes.buttons}
