@@ -5,7 +5,7 @@ import { createStore, combineReducers, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import logger from "redux-logger";
 import thunkMiddleware from "redux-thunk";
-import { reminders, todos } from "./store/reducers";
+import { reminders, todos, isVerified } from "./store/reducers";
 import Loading from "react-fullscreen-loading";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 const App = lazy(() => import("./App"));
@@ -14,6 +14,7 @@ const Footer = lazy(() => import("./Components/footer"));
 const rootReducer = combineReducers({
 	reminders,
 	todos,
+	isVerified,
 });
 
 const store = createStore(

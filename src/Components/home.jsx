@@ -12,6 +12,7 @@ import {
 	clearReminderMessages,
 } from "../store/actions/reminders";
 import { getTodos, clearTodoMessages } from "../store/actions/todos";
+import { isVerified } from "../store/actions/verified";
 import AlarmAddIcon from "@material-ui/icons/AlarmAdd";
 import {
 	Typography,
@@ -28,6 +29,7 @@ const mapDispatchToProps = dispatch => ({
 	getTodos: () => dispatch(getTodos()),
 	clearReminderMessages: () => dispatch(clearReminderMessages()),
 	clearTodoMessages: () => dispatch(clearTodoMessages()),
+	isVerified: () => dispatch(isVerified()),
 });
 
 function TabPanel(props) {
@@ -81,6 +83,7 @@ function ScrollableTabsButtonForce(props) {
 	React.useEffect(() => {
 		props.getReminders();
 		props.getTodos();
+		props.isVerified();
 		// eslint-disable-next-line
 	}, []);
 
