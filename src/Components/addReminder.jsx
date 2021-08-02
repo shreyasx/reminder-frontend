@@ -107,7 +107,7 @@ const AddReminder = props => {
 			<Snackbar open={success} autoHideDuration={2500} onClose={handleClose}>
 				<Alert onClose={handleClose} severity="success">
 					{mailSent
-						? "Mail has been sent to your email address!"
+						? "Verification link sent to your email address!"
 						: props.reminders.success}
 				</Alert>
 			</Snackbar>

@@ -6,7 +6,7 @@ import useStyles from "./styles";
 
 const Welcome = () => {
 	const [values, setValues] = useState({
-		registerError: { email: "", password: "", username: "" },
+		registerError: { email: "", password: "", username: "", name: "" },
 		loginError: { username: "", password: "" },
 		name: "",
 		username: "",
@@ -16,9 +16,92 @@ const Welcome = () => {
 		didRedirect: false,
 	});
 
+	const handleError = error => {
+		switch (error) {
+			case "Name must be at least 3 characters long.":
+				setValues({
+					...values,
+					registerError: { email: "", password: "", username: "", name: error },
+				});
+				break;
+
+			case "Username must be at least 3 characters long.":
+				setValues({
+					...values,
+					registerError: { email: "", password: "", username: error, name: "" },
+				});
+				break;
+
+			case "An account with that username already exists. You can log in.":
+				setValues({
+					...values,
+					registerError: { email: "", password: "", username: error, name: "" },
+				});
+				break;
+
+			case "Enter valid username.":
+				setValues({
+					...values,
+					registerError: { email: "", password: "", username: error, name: "" },
+				});
+				break;
+
+			case "Enter a valid email address.":
+				setValues({
+					...values,
+					registerError: { email: error, password: "", username: "", name: "" },
+				});
+				break;
+
+			case "An account with that email already exists. You can log in.":
+				setValues({
+					...values,
+					registerError: { email: error, password: "", username: "", name: "" },
+				});
+				break;
+
+			case "Password must be atleast 5 characters long.":
+				setValues({
+					...values,
+					registerError: { email: "", password: error, username: "", name: "" },
+				});
+				break;
+
+			case "No account linked with that username.":
+				setValues({
+					...values,
+					loginError: { password: "", username: error },
+				});
+				break;
+
+			case "Incorrect password.":
+				setValues({
+					...values,
+					loginError: { password: error, username: "" },
+				});
+				break;
+
+			case "Username cannot be empty.":
+				setValues({
+					...values,
+					loginError: { password: "", username: error },
+				});
+				break;
+
+			case "Password cannot be empty.":
+				setValues({
+					...values,
+					loginError: { password: error, username: "" },
+				});
+				break;
+
+			default:
+		}
+	};
+
 	const classes = useStyles();
 
-	const { name, error, username, email, password, loading } = values;
+	const { name, username, email, password, loading } = values;
 
 	const handleChange = nam => event =>
 		setValues({ ...values, [nam]: event.target.value });
@@ -34,11 +117,16 @@ const Welcome = () => {
 	);
 
 	const onSubmitSignIn = event => {
-		setValues({ ...values, loading: true });
+		setValues({
+			...values,
+			loading: true,
+			loginError: { password: "", username: "" },
+		});
 		signin({ username: username.toLowerCase(), password })
 			.then(data => {
 				if (data.error) {
-					setValues({ ...values, error: data.error, loading: false });
+					// setValues({ ...values, error: data.error, loading: false });
+					handleError(data.error);
 				} else {
 					authenticate(data, () => {
 						setValues({
@@ -54,11 +142,15 @@ const Welcome = () => {
 	};
 
 	const onSubmitSignUp = event => {
-		setValues({ ...values, loading: true });
-		signup({ name, username: username.toLowerCase(), password, email })
-			.then(data => {
+		setValues({
+			...values,
+			registerError: { email: "", password: "", username: "", name: "" },
+			loading: true,
+		});
+		signup({ name, username: username.toLowerCase(), password, email }).then(
+			data => {
 				if (data.error) {
-					setValues({ ...values, error: data.error, loading: false });
+					handleError(data.error);
 				} else {
 					authenticate(data, () => {
 						setValues({
@@ -67,10 +159,8 @@ const Welcome = () => {
 						});
 					});
 				}
-			})
-			.catch(er => {
-				console.log("Signin request failed");
-			});
+			}
+		);
 	};
 
 	const signupForm = () => (
@@ -80,7 +170,7 @@ const Welcome = () => {
 				<TextField
 					className={classes.inputField}
 					error={values.registerError.name && true}
-					label={values.registerError.name ? "Error" : "Name"}
+					label="Name"
 					placeholder="Shreyas J"
 					helperText={
 						values.registerError.name
@@ -93,7 +183,7 @@ const Welcome = () => {
 				<TextField
 					className={classes.inputField}
 					error={values.registerError.username && true}
-					label={values.registerError.username ? "Error" : "Username"}
+					label="Username"
 					placeholder="shreyasx"
 					helperText={
 						values.registerError.username
@@ -106,7 +196,7 @@ const Welcome = () => {
 				<TextField
 					className={classes.inputField}
 					error={values.registerError.email && true}
-					label={values.registerError.email ? "Error" : "Email"}
+					label="Email"
 					placeholder="shreyxs@gmail.com"
 					helperText={
 						values.registerError.email
@@ -119,8 +209,9 @@ const Welcome = () => {
 				<TextField
 					className={classes.inputField}
 					error={values.registerError.password && true}
-					label={values.registerError.password ? "Error" : "Password"}
+					label="Password"
 					placeholder="Password"
+					type="password"
 					helperText={
 						values.registerError.password
 							? values.registerError.password
@@ -135,7 +226,7 @@ const Welcome = () => {
 				onClick={onSubmitSignUp}
 				color="primary"
 				variant="contained"
-				disabled={false}
+				disabled={loading}
 			>
 				Register
 			</Button>
@@ -149,7 +240,7 @@ const Welcome = () => {
 				<TextField
 					className={classes.inputField}
 					error={values.loginError.username && true}
-					label={values.loginError.username ? "Error" : "Username"}
+					label="Username"
 					placeholder="shreyasx"
 					helperText={
 						values.loginError.username
@@ -164,7 +255,7 @@ const Welcome = () => {
 				<TextField
 					className={classes.inputField}
 					error={values.loginError.password && true}
-					label={values.loginError.password ? "Error" : "Password"}
+					label="Password"
 					placeholder="Password"
 					type="password"
 					helperText={
@@ -181,22 +272,17 @@ const Welcome = () => {
 				onClick={onSubmitSignIn}
 				color="primary"
 				variant="contained"
+				disabled={loading}
 			>
 				Login
 			</Button>
 		</>
 	);
 
-	const loadingMessage = () => loading && <h2>Loading...</h2>;
-
 	const performRedirect = () =>
 		isAuthenticated() && (
 			<Redirect to={`/${isAuthenticated().user.username}`} />
 		);
-
-	const errorMessage = () => (
-		<div style={{ display: error ? "" : "none", color: "red" }}>{error}</div>
-	);
 
 	return isAuthenticated().user ? (
 		<Redirect to={`/${isAuthenticated().user.username}`} />
@@ -207,8 +293,6 @@ const Welcome = () => {
 				or To-dos, and when the time comes, you get reminded on the email
 				address that you provide. Try now!
 			</p>
-			{loadingMessage()}
-			{errorMessage()}
 			<Grid container justifyContent="center" spacing={1}>
 				<Grid className={classes.paper} item xs={12} sm={10} md={6}>
 					{signupForm()}
