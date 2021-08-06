@@ -1,3 +1,5 @@
+import { API } from "../backend";
+
 const publicVapidKey =
 	"BHKwbXeFf6VxY3qUuCMArDUI5n-eqDkLWD9s7h1uJnNnSDt9jEL4tdh07Vw596yMYX54ky25yoTlg2gPAczTW1g";
 
@@ -15,7 +17,6 @@ function urlBase64ToUint8Array(base64String) {
 }
 
 export async function getPushEndpont() {
-	console.log("yo");
 	await navigator.serviceWorker.register("/sw.js", {
 		scope: "/",
 	});
@@ -57,10 +58,9 @@ export async function getPushEndpont() {
 }
 
 function sendSubscription(subscription) {
-	console.log("yoo");
 	const jwt = JSON.parse(localStorage.getItem("jwt"));
 	if (jwt) {
-		return fetch(`http://localhost:5000/subscribe/${jwt.user.username}`, {
+		return fetch(`${API}/subscribe/${jwt.user.username}`, {
 			method: "POST",
 			body: JSON.stringify({ subscription }),
 			headers: {
