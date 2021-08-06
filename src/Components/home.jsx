@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
-import { signout } from "../auth/helper";
+import { isAuthenticated, signout } from "../auth/helper";
 import { Reminders, Todos, AddReminder, IntroText } from ".";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
@@ -24,6 +24,7 @@ import {
 	Box,
 } from "@material-ui/core";
 import { getPushEndpont } from "../utils/push";
+import { API } from "../backend";
 
 const mapDispatchToProps = dispatch => ({
 	getReminders: () => dispatch(getReminders()),
@@ -136,6 +137,22 @@ function ScrollableTabsButtonForce(props) {
 					color="primary"
 				>
 					signout
+				</Button>
+				<Button
+					onClick={() => {
+						fetch(`${API}/subscribe/test/${isAuthenticated().user.username}`, {
+							method: "GET",
+							headers: {
+								Accept: "application/json",
+								"Content-Type": "application/json",
+								Authorization: `Bearer ${isAuthenticated().token}`,
+							},
+						});
+					}}
+					variant="outlined"
+					color="primary"
+				>
+					Push notify me!
 				</Button>
 			</TabPanel>
 		</div>
