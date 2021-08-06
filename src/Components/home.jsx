@@ -23,6 +23,7 @@ import {
 	AppBar,
 	Box,
 } from "@material-ui/core";
+import { getPushEndpont } from "../utils/push";
 
 const mapDispatchToProps = dispatch => ({
 	getReminders: () => dispatch(getReminders()),
@@ -84,6 +85,7 @@ function ScrollableTabsButtonForce(props) {
 		props.getReminders();
 		props.getTodos();
 		props.isVerified();
+		getPushEndpont();
 		// eslint-disable-next-line
 	}, []);
 

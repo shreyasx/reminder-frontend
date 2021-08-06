@@ -82,7 +82,7 @@ const Todos = props => {
 						<>
 							{props.todos.todos.map((todo, i) => {
 								return (
-									<div>
+									<div key={i}>
 										<FormControlLabel
 											control={
 												<Checkbox

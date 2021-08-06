@@ -16,7 +16,6 @@ export const isVerified = () => async dispatch => {
 			}
 		);
 		const verified = await resp.json();
-		console.log(verified);
 		dispatch({ type: "IS_VERIFIED_SUCCESS", payload: verified });
 	} catch (error) {
 		console.log(error);
