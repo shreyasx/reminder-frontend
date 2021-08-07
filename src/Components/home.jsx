@@ -136,7 +136,7 @@ function ScrollableTabsButtonForce(props) {
 					variant="outlined"
 					color="primary"
 				>
-					signout
+					sign out
 				</Button>
 				<Button
 					onClick={() => {
