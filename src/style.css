@@ -10,6 +10,10 @@
 	min-height: calc(100vh - 30px);
 }
 
+#content-wrap {
+	padding-bottom: 80px;
+}
+
 #footer {
 	position: absolute;
 	bottom: 0;
@@ -18,6 +22,7 @@
 	text-align: center;
 	font-weight: 300;
 	font-size: small;
+	padding-bottom: 20px;
 }
 
 #quote {

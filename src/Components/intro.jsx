@@ -14,8 +14,7 @@ const IntroText = () => {
 					You need to verify your email address to be able to set reminders.
 				</li>
 				<li>
-					You cannot set a reminder in the next 2 minutes. I mean, why would you
-					wanna do that, right?
+					You cannot set a reminder in the next 2 minutes.
 				</li>
 			</ul>
 		</>
