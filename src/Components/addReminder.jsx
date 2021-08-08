@@ -74,7 +74,7 @@ const AddReminder = props => {
 		})
 			.then(r => r.json())
 			.then(resp => {
-				if (resp === "Sent mail") {
+				if (resp === true) {
 					setMailSent(true);
 					setSuccess(true);
 					setTimeout(() => {

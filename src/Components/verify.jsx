@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { API } from "../backend";
 
 const Verify = ({ match }) => {
-	const [resp, setResp] = useState(false);
+	const [resp, setResp] = useState("");
 	const [loading, setLoading] = useState(true);
 
 	const check = () => {
@@ -16,7 +16,7 @@ const Verify = ({ match }) => {
 		})
 			.then(R => R.json())
 			.then(res => {
-				setResp(res);
+				setResp(res.message);
 				setLoading(false);
 			})
 			.catch(console.log);
@@ -30,7 +30,7 @@ const Verify = ({ match }) => {
 				<h4>Loading..</h4>
 			) : (
 				<h4>
-					{resp === true ? (
+					{resp === "done" ? (
 						<>
 							Account verified. Go to{" "}
 							<a href="https://remindersandtodos.netlify.app/">
@@ -39,7 +39,7 @@ const Verify = ({ match }) => {
 							or refresh the page that brought you here.
 						</>
 					) : (
-						resp.error
+						resp
 					)}
 				</h4>
 			)}
