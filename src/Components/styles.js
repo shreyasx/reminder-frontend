@@ -6,10 +6,8 @@ const useStyles = makeStyles(theme => ({
 	buttons: { marginBottom: 25 },
 	intro: {
 		padding: "25px 15%",
-		fontWeight: 700,
+		fontWeight: 600,
 		lineHeight: "1.3em",
-		fontSize: 40,
-		textJustify: "",
 	},
 }));
 

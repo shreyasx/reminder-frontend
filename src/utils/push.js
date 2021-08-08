@@ -1,5 +1,3 @@
-import { API } from "../backend";
-
 const publicVapidKey =
 	"BHKwbXeFf6VxY3qUuCMArDUI5n-eqDkLWD9s7h1uJnNnSDt9jEL4tdh07Vw596yMYX54ky25yoTlg2gPAczTW1g";
 
@@ -22,50 +20,36 @@ export async function getPushEndpont() {
 	});
 
 	if ("serviceWorker" in navigator) {
-		navigator.serviceWorker.ready
+		return navigator.serviceWorker.ready
 			.then(function (registration) {
-				if (!registration.pushManager) {
-					return;
-				}
+				if (!registration.pushManager) return "No registration push manager.";
 
-				registration.pushManager
+				return registration.pushManager
 					.getSubscription()
 					.then(function (existedSubscription) {
 						if (existedSubscription === null) {
-							registration.pushManager
+							return registration.pushManager
 								.subscribe({
 									applicationServerKey: urlBase64ToUint8Array(publicVapidKey),
 									userVisibleOnly: true,
 								})
 								.then(function (newSubscription) {
-									sendSubscription(newSubscription);
+									return newSubscription;
 								})
 								.catch(function (e) {
 									if (Notification.permission !== "granted") {
+										console.error("No permission granted :(");
 									} else {
 										console.error(e);
 									}
 								});
 						} else {
-							sendSubscription(existedSubscription);
+							return existedSubscription;
 						}
 					});
 			})
 			.catch(function (e) {
 				console.error(e);
 			});
-	}
-}
-
-function sendSubscription(subscription) {
-	const jwt = JSON.parse(localStorage.getItem("jwt"));
-	if (jwt) {
-		return fetch(`${API}/subscribe/${jwt.user.username}`, {
-			method: "POST",
-			body: JSON.stringify({ subscription }),
-			headers: {
-				"content-type": "application/json",
-			},
-		});
 	}
 }

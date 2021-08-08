@@ -1,5 +1,6 @@
 import { isAuthenticated } from "../../auth/helper";
 import { API } from "../../backend";
+import { getPushEndpont } from "../../utils/push";
 
 export const getReminders = () => async dispatch => {
 	dispatch({ type: "REMINDERS_PENDING" });
@@ -44,7 +45,7 @@ export const addReminder = payload => async dispatch => {
 		});
 		return;
 	}
-
+	const subscription = await getPushEndpont();
 	try {
 		const response = await fetch(
 			`${API}/user/${isAuthenticated().user.username}/add/reminder`,
@@ -55,7 +56,7 @@ export const addReminder = payload => async dispatch => {
 					"Content-Type": "application/json",
 					Authorization: `Bearer ${isAuthenticated().token}`,
 				},
-				body: JSON.stringify(payload),
+				body: JSON.stringify({ ...payload, subscription }),
 			}
 		);
 		const reminder = await response.json();

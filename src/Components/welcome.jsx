@@ -288,12 +288,12 @@ const Welcome = () => {
 		<Redirect to={`/${isAuthenticated().user.username}`} />
 	) : (
 		<>
-			<h1 className={classes.intro}>
+			<p className={classes.intro}>
 				Hello, welcome to Reminders & Todos. Here you sign in to set reminders,
 				or To-dos, and when the time comes, you get reminded on the email
 				address that you provide. You'll also be sent a little browser
 				notification. Free to try now!
-			</h1>
+			</p>
 			<Grid container justifyContent="center" spacing={1}>
 				<Grid className={classes.paper} item xs={12} sm={10} md={6}>
 					{signupForm()}
