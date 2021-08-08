@@ -108,6 +108,7 @@ const Todos = props => {
 				<Grid item xs={12} sm={6}>
 					<div>
 						<TextField
+							id="todo-input"
 							className={classes.inputField}
 							label={"Title"}
 							placeholder="shreyasx"
@@ -118,7 +119,10 @@ const Todos = props => {
 					</div>
 					<Button
 						className={classes.buttons}
-						onClick={() => props.addTodo(title)}
+						onClick={async () => {
+							await props.addTodo(title);
+							document.getElementById("todo-input").value = null;
+						}}
 						disabled={props.todos.loading}
 						color="primary"
 						variant="contained"
