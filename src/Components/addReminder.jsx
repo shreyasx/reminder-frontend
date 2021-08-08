@@ -1,19 +1,26 @@
 import React from "react";
 import { isAuthenticated } from "../auth/helper";
 import { API } from "../backend";
-import { Grid, TextField, Button } from "@material-ui/core";
+import {
+	Grid,
+	TextField,
+	Button,
+	FormControlLabel,
+	Checkbox,
+	Snackbar,
+} from "@material-ui/core";
 import useStyles from "./styles";
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
 import { addReminder, clearReminderMessages } from "../store/actions/reminders";
 import { connect } from "react-redux";
-import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 import {
 	MuiPickersUtilsProvider,
 	KeyboardTimePicker,
 	KeyboardDatePicker,
 } from "@material-ui/pickers";
+import { getPushEndpont } from "../utils/push";
 
 const mapStateToProps = state => ({
 	reminders: state.reminders,
@@ -36,6 +43,7 @@ const AddReminder = props => {
 	const [success, setSuccess] = React.useState(false);
 	const [loading, setLoading] = React.useState(false);
 	const [mailSent, setMailSent] = React.useState(false);
+	const [sendEmail, setSendEmail] = React.useState(true);
 
 	React.useEffect(() => {
 		const { success, error } = props.reminders;
@@ -43,13 +51,13 @@ const AddReminder = props => {
 			setError(true);
 			setTimeout(() => {
 				props.clearSuccessMessage();
-			}, 3000);
+			}, 5500);
 		}
 		if (success !== "") {
 			setSuccess(true);
 			setTimeout(() => {
 				props.clearSuccessMessage();
-			}, 3000);
+			}, 5500);
 		}
 	}, [props]);
 
@@ -89,23 +97,27 @@ const AddReminder = props => {
 			});
 	};
 
-	const handleAddReminder = () => {
+	const handleAddReminder = async () => {
+		const subscription = await getPushEndpont();
 		const data = {
 			title,
 			user: isAuthenticated().user.username,
 			date: Date.parse(selectedDate),
+			subscription,
+			sendEmail,
 		};
-		props.addReminder(data);
+		await props.addReminder(data);
+		document.getElementById("rem-input").value = null;
 	};
 
 	return (
 		<>
-			<Snackbar open={error} autoHideDuration={2500} onClose={handleClose}>
+			<Snackbar open={error} autoHideDuration={5000} onClose={handleClose}>
 				<Alert onClose={handleClose} severity="error">
 					{props.reminders.error}
 				</Alert>
 			</Snackbar>
-			<Snackbar open={success} autoHideDuration={2500} onClose={handleClose}>
+			<Snackbar open={success} autoHideDuration={5000} onClose={handleClose}>
 				<Alert onClose={handleClose} severity="success">
 					{mailSent
 						? "Verification link sent to your email address!"
@@ -123,11 +135,22 @@ const AddReminder = props => {
 				<TextField
 					className={classes.inputField}
 					label="Title"
+					id="rem-input"
 					onChange={event => setTitle(event.target.value)}
 					placeholder="Pick up potatoes!"
 					helperText="What do you wanna be reminded about?"
 					variant="outlined"
-					id="title"
+				/>
+				<FormControlLabel
+					control={
+						<Checkbox
+							checked={sendEmail}
+							onChange={event => setSendEmail(event.target.checked)}
+							name="checkedB"
+							color="primary"
+						/>
+					}
+					label="Send me a reminder email as well."
 				/>
 				<MuiPickersUtilsProvider utils={DateFnsUtils}>
 					<Grid container justifyContent="space-evenly">

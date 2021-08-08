@@ -1,6 +1,5 @@
 import { isAuthenticated } from "../../auth/helper";
 import { API } from "../../backend";
-import { getPushEndpont } from "../../utils/push";
 
 export const getReminders = () => async dispatch => {
 	dispatch({ type: "REMINDERS_PENDING" });
@@ -36,16 +35,23 @@ export const getReminders = () => async dispatch => {
 
 export const addReminder = payload => async dispatch => {
 	dispatch({ type: "ADD_REMINDER_PENDING" });
-
-	const { title, user, date } = payload;
-	if (title === "" || user === "" || date < Date.now() + 120000) {
+	console.log(payload);
+	const { title, user, subscription, sendEmail } = payload;
+	if (title === "" || user === "") {
 		dispatch({
 			type: "ADD_REMINDER_FAILURE",
 			payload: "Please check your data!",
 		});
 		return;
 	}
-	const subscription = await getPushEndpont();
+	if (!subscription && !sendEmail) {
+		dispatch({
+			type: "ADD_REMINDER_FAILURE",
+			payload:
+				"In order to receive the reminder, enable email option or allow notifications.",
+		});
+		return;
+	}
 	try {
 		const response = await fetch(
 			`${API}/user/${isAuthenticated().user.username}/add/reminder`,
@@ -56,7 +62,7 @@ export const addReminder = payload => async dispatch => {
 					"Content-Type": "application/json",
 					Authorization: `Bearer ${isAuthenticated().token}`,
 				},
-				body: JSON.stringify({ ...payload, subscription }),
+				body: JSON.stringify(payload),
 			}
 		);
 		const reminder = await response.json();
