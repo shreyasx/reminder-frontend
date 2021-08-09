@@ -3,7 +3,6 @@ import React, { Suspense, lazy } from "react";
 import ReactDOM from "react-dom";
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
-import logger from "redux-logger";
 import thunkMiddleware from "redux-thunk";
 import { reminders, todos, sw, isVerified } from "./store/reducers";
 import Loading from "react-fullscreen-loading";
@@ -12,13 +11,7 @@ const App = lazy(() => import("./App"));
 const Footer = lazy(() => import("./Components/footer"));
 
 const rootReducer = combineReducers({ reminders, todos, isVerified, sw });
-
-const store = createStore(
-	rootReducer,
-	applyMiddleware(thunkMiddleware, logger)
-);
-
-console.log(store.getState());
+const store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
 
 ReactDOM.render(
 	<Provider store={store}>

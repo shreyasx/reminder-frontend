@@ -21,8 +21,6 @@ const App = () => {
 		}
 	};
 
-	if (sw.serviceWorkerInitialized) console.log("Ready for offline use.");
-
 	return (
 		<BrowserRouter>
 			<Switch>
@@ -33,7 +31,7 @@ const App = () => {
 			{sw.serviceWorkerUpdated && (
 				<Alert
 					text="There is a new version available."
-					type={"SW_UPDATE"}
+					type="SW_UPDATE"
 					buttonText="Update"
 					onClick={updateServiceWorker}
 				/>
