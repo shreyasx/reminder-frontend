@@ -9,7 +9,11 @@ export const sw = (state = initialState, action = {}) => {
 		case "SW_INIT":
 			return { ...state, serviceWorkerInitialized: true };
 		case "SW_UPDATE":
-			return { ...state, serviceWorkerRegistration: action.payload };
+			return {
+				...state,
+				serviceWorkerRegistration: action.payload,
+				serviceWorkerUpdated: true,
+			};
 		default:
 			return state;
 	}
