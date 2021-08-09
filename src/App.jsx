@@ -12,7 +12,6 @@ const App = () => {
 	const updateServiceWorker = () => {
 		const registrationWaiting = sw.serviceWorkerRegistration.waiting;
 		if (registrationWaiting) {
-			console.log("Waiting");
 			registrationWaiting.postMessage({ type: "SKIP_WAITING" });
 			registrationWaiting.addEventListener("statechange", e => {
 				if (e.target.state === "activated") {
@@ -21,12 +20,6 @@ const App = () => {
 			});
 		}
 	};
-
-	React.useEffect(() => {
-		console.log(`serviceWorkerUpdated`, sw.serviceWorkerUpdated);
-		console.log(`serviceWorkerRegistration`, sw.serviceWorkerRegistration);
-		console.log(`serviceWorkerInitialized`, sw.serviceWorkerInitialized);
-	}, [sw]);
 
 	return (
 		<>
