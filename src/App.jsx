@@ -12,6 +12,7 @@ const App = () => {
 	const updateServiceWorker = () => {
 		const registrationWaiting = sw.serviceWorkerRegistration.waiting;
 		if (registrationWaiting) {
+			console.log("Waiting");
 			registrationWaiting.postMessage({ type: "SKIP_WAITING" });
 			registrationWaiting.addEventListener("statechange", e => {
 				if (e.target.state === "activated") {
@@ -27,6 +28,9 @@ const App = () => {
 
 	return (
 		<BrowserRouter>
+			{sw.serviceWorkerInitialized && (
+				<Alert text="Page has been saved for offline use" />
+			)}
 			<Switch>
 				<Route path="/" exact component={Welcome} />
 				<PrivateRoute path="/:username" exact component={Home} />
