@@ -33,11 +33,6 @@ const App = () => {
 			{sw.serviceWorkerInitialized && (
 				<Alert text="Page has been saved for offline use" />
 			)}
-			<Switch>
-				<Route path="/" exact component={Welcome} />
-				<PrivateRoute path="/:username" exact component={Home} />
-				<Route path="/verify/:token" exact component={Verify} />
-			</Switch>
 			{sw.serviceWorkerUpdated && (
 				<Alert
 					text="There is a new version available."
@@ -46,6 +41,11 @@ const App = () => {
 					onClick={updateServiceWorker}
 				/>
 			)}
+			<Switch>
+				<Route path="/" exact component={Welcome} />
+				<PrivateRoute path="/:username" exact component={Home} />
+				<Route path="/verify/:token" exact component={Verify} />
+			</Switch>
 		</BrowserRouter>
 	);
 };
