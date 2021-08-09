@@ -292,7 +292,7 @@ const Welcome = () => {
 				Hello, welcome to Reminders & Todos. Here you sign in to set reminders,
 				or To-dos, and when the time comes, you get reminded on the email
 				address that you provide. You'll also be sent a little browser
-				notification. Free to try now!
+				notification. Free to try now!!!
 			</p>
 			<Grid container justifyContent="center" spacing={1}>
 				<Grid className={classes.paper} item xs={12} sm={10} md={6}>
