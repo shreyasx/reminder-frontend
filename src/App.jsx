@@ -22,9 +22,11 @@ const App = () => {
 		}
 	};
 
-	console.log(`serviceWorkerUpdated ${sw.serviceWorkerUpdated}`);
-	console.log(`serviceWorkerRegistration`, sw.serviceWorkerRegistration);
-	console.log(`serviceWorkerInitialized ${sw.serviceWorkerInitialized}`);
+	React.useEffect(() => {
+		console.log(`serviceWorkerUpdated ${sw.serviceWorkerUpdated}`);
+		console.log(`serviceWorkerRegistration`, sw.serviceWorkerRegistration);
+		console.log(`serviceWorkerInitialized ${sw.serviceWorkerInitialized}`);
+	}, [sw]);
 
 	return (
 		<BrowserRouter>
