@@ -49,6 +49,8 @@ const Todos = props => {
 		}
 		if (success !== "") {
 			setSuccess(true);
+			document.getElementById("todo-input").value = null;
+			setTitle("");
 			setTimeout(() => {
 				props.clearSuccessMessage();
 			}, 3000);
@@ -119,10 +121,7 @@ const Todos = props => {
 					</div>
 					<Button
 						className={classes.buttons}
-						onClick={async () => {
-							await props.addTodo(title);
-							document.getElementById("todo-input").value = null;
-						}}
+						onClick={() => props.addTodo(title)}
 						disabled={props.todos.loading}
 						color="primary"
 						variant="contained"

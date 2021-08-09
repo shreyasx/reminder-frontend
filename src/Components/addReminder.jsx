@@ -44,6 +44,7 @@ const AddReminder = props => {
 	const [loading, setLoading] = React.useState(false);
 	const [mailSent, setMailSent] = React.useState(false);
 	const [sendEmail, setSendEmail] = React.useState(true);
+	const [subscription, setSubscription] = React.useState({});
 
 	React.useEffect(() => {
 		const { success, error } = props.reminders;
@@ -55,11 +56,19 @@ const AddReminder = props => {
 		}
 		if (success !== "") {
 			setSuccess(true);
+			document.getElementById("rem-input").value = null;
 			setTimeout(() => {
 				props.clearSuccessMessage();
 			}, 5500);
 		}
 	}, [props]);
+
+	React.useEffect(() => {
+		(async () => {
+			const subscription = await getPushEndpont();
+			setSubscription(subscription);
+		})();
+	}, []);
 
 	const handleClose = (event, reason) => {
 		if (reason === "clickaway") return;
@@ -98,7 +107,6 @@ const AddReminder = props => {
 	};
 
 	const handleAddReminder = async () => {
-		const subscription = await getPushEndpont();
 		const data = {
 			title,
 			user: isAuthenticated().user.username,
@@ -106,8 +114,7 @@ const AddReminder = props => {
 			subscription,
 			sendEmail,
 		};
-		await props.addReminder(data);
-		document.getElementById("rem-input").value = null;
+		props.addReminder(data);
 	};
 
 	return (
