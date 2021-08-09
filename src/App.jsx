@@ -29,7 +29,7 @@ const App = () => {
 	}, [sw]);
 
 	return (
-		<BrowserRouter>
+		<>
 			{sw.serviceWorkerInitialized && (
 				<Alert text="Page has been saved for offline use" />
 			)}
@@ -41,12 +41,14 @@ const App = () => {
 					onClick={updateServiceWorker}
 				/>
 			)}
-			<Switch>
-				<Route path="/" exact component={Welcome} />
-				<PrivateRoute path="/:username" exact component={Home} />
-				<Route path="/verify/:token" exact component={Verify} />
-			</Switch>
-		</BrowserRouter>
+			<BrowserRouter>
+				<Switch>
+					<Route path="/" exact component={Welcome} />
+					<PrivateRoute path="/:username" exact component={Home} />
+					<Route path="/verify/:token" exact component={Verify} />
+				</Switch>
+			</BrowserRouter>
+		</>
 	);
 };
 
