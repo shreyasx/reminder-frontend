@@ -8,8 +8,7 @@ import "./style.css";
 
 const App = () => {
 	const sw = useSelector(state => state.sw);
-	// eslint-disable-next-line
-	React.useEffect(() => console.log(sw), []);
+	React.useEffect(() => console.log("sw-", sw), [sw]);
 
 	const updateServiceWorker = () => {
 		const registrationWaiting = sw.serviceWorkerRegistration.waiting;
