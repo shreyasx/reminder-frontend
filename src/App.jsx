@@ -11,6 +11,7 @@ const App = () => {
 	React.useEffect(() => console.log("sw-", sw), [sw]);
 
 	const updateServiceWorker = () => {
+		console.log("in fn 2");
 		const registrationWaiting = sw.serviceWorkerRegistration.waiting;
 		if (registrationWaiting) {
 			registrationWaiting.postMessage({ type: "SKIP_WAITING" });
