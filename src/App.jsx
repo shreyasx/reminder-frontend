@@ -16,9 +16,7 @@ const App = () => {
 		if (registrationWaiting) {
 			registrationWaiting.postMessage({ type: "SKIP_WAITING" });
 			registrationWaiting.addEventListener("statechange", e => {
-				if (e.target.state === "activated") {
-					window.location.reload();
-				}
+				if (e.target.state === "activated") window.location.reload();
 			});
 		}
 	};
@@ -46,7 +44,5 @@ const App = () => {
 		</>
 	);
 };
-
-App.whyDidYouRender = true;
 
 export default App;

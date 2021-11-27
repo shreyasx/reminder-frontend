@@ -1,4 +1,3 @@
-import "./wdyr";
 import React, { Suspense, lazy } from "react";
 import ReactDOM from "react-dom";
 import { createStore, combineReducers, applyMiddleware } from "redux";
