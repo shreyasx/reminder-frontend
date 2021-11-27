@@ -13,6 +13,7 @@ export const sw = (state = initialState, action = {}) => {
 				...state,
 				serviceWorkerRegistration: action.payload,
 				serviceWorkerUpdated: true,
+				serviceWorkerInitialized: true,
 			};
 		default:
 			return state;
