@@ -35,7 +35,8 @@ export const getReminders = () => async dispatch => {
 
 export const addReminder = payload => async dispatch => {
 	dispatch({ type: "ADD_REMINDER_PENDING" });
-	const { title, user, subscription, sendEmail } = payload;
+	const { title, user } = payload;
+	// subscription, sendEmail
 	if (title === "" || user === "") {
 		dispatch({
 			type: "ADD_REMINDER_FAILURE",
