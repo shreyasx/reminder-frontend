@@ -12,15 +12,17 @@ const App = () => {
 		(async () => {
 			try {
 				const subscription = await getPushEndpont();
-				await fetch(`${API}/subscribe/${isAuthenticated().user.username}`, {
-					method: "POST",
-					headers: {
-						Accept: "application/json",
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${isAuthenticated().token}`,
-					},
-					body: JSON.stringify(subscription),
-				});
+				if (subscription != null) {
+					await fetch(`${API}/subscribe/${isAuthenticated().user.username}`, {
+						method: "POST",
+						headers: {
+							Accept: "application/json",
+							"Content-Type": "application/json",
+							Authorization: `Bearer ${isAuthenticated().token}`,
+						},
+						body: JSON.stringify(subscription),
+					});
+				}
 			} catch (error) {
 				console.log(error);
 			}
