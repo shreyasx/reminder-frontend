@@ -35,7 +35,6 @@ export const getReminders = () => async dispatch => {
 
 export const addReminder = payload => async dispatch => {
 	dispatch({ type: "ADD_REMINDER_PENDING" });
-	console.log(payload);
 	const { title, user, subscription, sendEmail } = payload;
 	if (title === "" || user === "") {
 		dispatch({
@@ -44,14 +43,14 @@ export const addReminder = payload => async dispatch => {
 		});
 		return;
 	}
-	if (!subscription && !sendEmail) {
-		dispatch({
-			type: "ADD_REMINDER_FAILURE",
-			payload:
-				"In order to receive the reminder, enable email option or allow notifications.",
-		});
-		return;
-	}
+	// if (!subscription && !sendEmail) {
+	// 	dispatch({
+	// 		type: "ADD_REMINDER_FAILURE",
+	// 		payload:
+	// 			"In order to receive the reminder, enable email option or allow notifications.",
+	// 	});
+	// 	return;
+	// }
 	try {
 		const response = await fetch(
 			`${API}/user/${isAuthenticated().user.username}/add/reminder`,

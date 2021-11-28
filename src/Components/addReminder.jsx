@@ -1,6 +1,12 @@
 import React from "react";
 import { isAuthenticated } from "../auth/helper";
 import { API } from "../backend";
+import useStyles from "./styles";
+import "date-fns";
+import DateFnsUtils from "@date-io/date-fns";
+import { addReminder, clearReminderMessages } from "../store/actions/reminders";
+import { connect } from "react-redux";
+import MuiAlert from "@material-ui/lab/Alert";
 import {
 	Grid,
 	TextField,
@@ -9,18 +15,12 @@ import {
 	Checkbox,
 	Snackbar,
 } from "@material-ui/core";
-import useStyles from "./styles";
-import "date-fns";
-import DateFnsUtils from "@date-io/date-fns";
-import { addReminder, clearReminderMessages } from "../store/actions/reminders";
-import { connect } from "react-redux";
-import MuiAlert from "@material-ui/lab/Alert";
 import {
 	MuiPickersUtilsProvider,
 	KeyboardTimePicker,
 	KeyboardDatePicker,
 } from "@material-ui/pickers";
-import { getPushEndpont } from "../utils/push";
+// import { getPushEndpont } from "../utils/push";
 
 const mapStateToProps = state => ({
 	reminders: state.reminders,
@@ -44,7 +44,7 @@ const AddReminder = props => {
 	const [loading, setLoading] = React.useState(false);
 	const [mailSent, setMailSent] = React.useState(false);
 	const [sendEmail, setSendEmail] = React.useState(true);
-	const [subscription, setSubscription] = React.useState(null);
+	// const [subscription, setSubscription] = React.useState(null);
 
 	React.useEffect(() => {
 		const { success, error } = props.reminders;
@@ -63,12 +63,12 @@ const AddReminder = props => {
 		}
 	}, [props]);
 
-	React.useEffect(() => {
-		(async () => {
-			const subscription = await getPushEndpont();
-			setSubscription(subscription);
-		})();
-	}, []);
+	// React.useEffect(() => {
+	// 	(async () => {
+	// 		const subscription = await getPushEndpont();
+	// 		setSubscription(subscription);
+	// 	})();
+	// }, []);
 
 	const handleClose = (event, reason) => {
 		if (reason === "clickaway") return;
@@ -111,7 +111,7 @@ const AddReminder = props => {
 			title,
 			user: isAuthenticated().user.username,
 			date: Date.parse(selectedDate),
-			subscription: subscription === null ? undefined : subscription,
+			// subscription: subscription == null ? undefined : subscription,
 			sendEmail,
 		});
 	};
