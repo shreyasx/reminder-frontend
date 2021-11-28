@@ -308,6 +308,4 @@ const Welcome = () => {
 	);
 };
 
-Welcome.whyDidYouRender = true;
-
 export default Welcome;

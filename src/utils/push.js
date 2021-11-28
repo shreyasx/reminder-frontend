@@ -15,9 +15,7 @@ function urlBase64ToUint8Array(base64String) {
 }
 
 export async function getPushEndpont() {
-	await navigator.serviceWorker.register("/sw.js", {
-		scope: "/",
-	});
+	await navigator.serviceWorker.register("/sw.js", { scope: "/" });
 
 	if ("serviceWorker" in navigator) {
 		return navigator.serviceWorker.ready
@@ -42,6 +40,7 @@ export async function getPushEndpont() {
 									} else {
 										console.error(e);
 									}
+									return null;
 								});
 						} else {
 							return existedSubscription;

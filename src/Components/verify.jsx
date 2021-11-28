@@ -47,6 +47,4 @@ const Verify = ({ match }) => {
 	);
 };
 
-Verify.whyDidYouRender = true;
-
 export default Verify;

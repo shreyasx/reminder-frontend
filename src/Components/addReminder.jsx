@@ -44,7 +44,7 @@ const AddReminder = props => {
 	const [loading, setLoading] = React.useState(false);
 	const [mailSent, setMailSent] = React.useState(false);
 	const [sendEmail, setSendEmail] = React.useState(true);
-	const [subscription, setSubscription] = React.useState({});
+	const [subscription, setSubscription] = React.useState(null);
 
 	React.useEffect(() => {
 		const { success, error } = props.reminders;
@@ -107,14 +107,13 @@ const AddReminder = props => {
 	};
 
 	const handleAddReminder = async () => {
-		const data = {
+		props.addReminder({
 			title,
 			user: isAuthenticated().user.username,
 			date: Date.parse(selectedDate),
-			subscription,
+			subscription: subscription === null ? undefined : subscription,
 			sendEmail,
-		};
-		props.addReminder(data);
+		});
 	};
 
 	return (
