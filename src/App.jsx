@@ -12,7 +12,7 @@ const App = () => {
 		(async () => {
 			try {
 				const subscription = await getPushEndpont();
-				if (subscription != null) {
+				if (subscription !== null) {
 					await fetch(`${API}/subscribe/${isAuthenticated().user.username}`, {
 						method: "POST",
 						headers: {

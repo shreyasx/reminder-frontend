@@ -20,7 +20,7 @@ export async function getPushEndpont() {
 	if ("serviceWorker" in navigator) {
 		return navigator.serviceWorker.ready
 			.then(function (registration) {
-				if (!registration.pushManager) return "No registration push manager.";
+				if (!registration.pushManager) return null;
 
 				return registration.pushManager
 					.getSubscription()

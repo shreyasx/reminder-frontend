@@ -144,7 +144,7 @@ const AddReminder = props => {
 					id="rem-input"
 					onChange={event => setTitle(event.target.value)}
 					placeholder="Pick up potatoes!"
-					helperText="What do you wanna be reminded about?"
+					helperText="You'll get a browser notification from this website."
 					variant="outlined"
 				/>
 				<FormControlLabel
