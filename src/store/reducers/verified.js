@@ -1,4 +1,4 @@
-const initialState = { verified: true, loading: false };
+const initialState = { verified: false, loading: false };
 
 export const isVerified = (state = initialState, action = {}) => {
 	switch (action.type) {
