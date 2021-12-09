@@ -1,21 +1,19 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
-import { isAuthenticated, signout } from "../auth/helper";
+import { signout } from "../auth/helper";
 import { Reminders, Todos, AddReminder, IntroText } from ".";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import AccessAlarmIcon from "@material-ui/icons/AccessAlarm";
 import { connect } from "react-redux";
-import { getPushEndpont } from "../utils/push";
-import { API } from "../backend";
-import { getTodos, clearTodoMessages } from "../store/actions/todos";
-import { isVerified } from "../store/actions/verified";
-import AlarmAddIcon from "@material-ui/icons/AlarmAdd";
 import {
 	getReminders,
 	clearReminderMessages,
 } from "../store/actions/reminders";
+import { getTodos, clearTodoMessages } from "../store/actions/todos";
+import { isVerified } from "../store/actions/verified";
+import AlarmAddIcon from "@material-ui/icons/AlarmAdd";
 import {
 	Typography,
 	Button,
@@ -25,10 +23,6 @@ import {
 	AppBar,
 	Box,
 } from "@material-ui/core";
-
-const mapStateToProps = state => ({
-	verified: state.isVerified,
-});
 
 const mapDispatchToProps = dispatch => ({
 	getReminders: () => dispatch(getReminders()),
@@ -93,29 +87,6 @@ function ScrollableTabsButtonForce(props) {
 		// eslint-disable-next-line
 	}, []);
 
-	React.useEffect(() => {
-		(async () => {
-			try {
-				if (props.verified.verified) {
-					const subscription = await getPushEndpont();
-					if (subscription !== null) {
-						await fetch(`${API}/subscribe/${isAuthenticated().user.username}`, {
-							method: "POST",
-							headers: {
-								Accept: "application/json",
-								"Content-Type": "application/json",
-								Authorization: `Bearer ${isAuthenticated().token}`,
-							},
-							body: JSON.stringify(subscription),
-						});
-					}
-				}
-			} catch (error) {
-				console.log(error);
-			}
-		})();
-	});
-
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
 		props.clearReminderMessages();
@@ -177,7 +148,4 @@ function ScrollableTabsButtonForce(props) {
 	);
 }
 
-export default connect(
-	mapStateToProps,
-	mapDispatchToProps
-)(ScrollableTabsButtonForce);
+export default connect(null, mapDispatchToProps)(ScrollableTabsButtonForce);

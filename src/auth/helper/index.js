@@ -1,5 +1,4 @@
 import { API } from "../../backend";
-import { getPushEndpont } from "../../utils/push";
 
 export const signup = user => {
 	return fetch(`${API}/auth/signup`, {
@@ -38,29 +37,25 @@ export const authenticate = (data, next) => {
 	}
 };
 
-export const signout = async next => {
+export const signout = next => {
 	if (typeof window !== "undefined") {
 		localStorage.removeItem("jwt");
 		localStorage.removeItem("lastTab");
 		next();
 	}
-	const subscription = await getPushEndpont();
-	if (subscription) {
-		await fetch(`${API}/auth/signout`, {
-			method: "POST",
-			headers: {
-				Accept: "application/json",
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${isAuthenticated().token}`,
-			},
-			body: JSON.stringify(subscription),
-		});
-	}
+
+	return fetch(`${API}/auth/signout`, {
+		method: "GET",
+	}).catch(console.log);
 };
 
 export const isAuthenticated = () => {
-	if (typeof window == "undefined") return false;
-	if (localStorage.getItem("jwt"))
+	if (typeof window == "undefined") {
+		return false;
+	}
+	if (localStorage.getItem("jwt")) {
 		return JSON.parse(localStorage.getItem("jwt"));
-	else return false;
+	} else {
+		return false;
+	}
 };
